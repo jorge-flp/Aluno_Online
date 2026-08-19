@@ -25,8 +25,6 @@ public class EventoModel {
     @JoinColumn(name = "id_calendario", nullable = false)
     private CalendarioModel calendarioLetivo;
 
-    private CalendarioModel calendarioModel;
-
     public EventoModel() {
     }
 
@@ -69,6 +67,5 @@ public class EventoModel {
     }
 
     public void setCalendarioLetivo(CalendarioModel calendarioLetivo) {
-        this.calendarioModel = calendarioLetivo;
     }
 }
