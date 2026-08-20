@@ -1,5 +1,8 @@
 package com.App_Escola.Api.Model;
 
+import java.util.List;
+import java.util.Optional;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -10,7 +13,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "calendario_letivo")
-public class CalendarioModel {
+public class CalendarioLetivoModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,7 +26,7 @@ public class CalendarioModel {
     @JoinColumn(name = "escola_inep", nullable = false, unique = true)
     private EscolaModel escola;
 
-    public CalendarioModel() {
+    public CalendarioLetivoModel() {
     }
 
     // Getters e Setters
@@ -57,5 +60,25 @@ public class CalendarioModel {
 
     public void setEscola(EscolaModel escola) {
         this.escola = escola;
+    }
+
+    public List<CalendarioLetivoModel> findAll() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'findAll'");
+    }
+
+    public Optional<CalendarioLetivoModel> findById(Integer id) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'findById'");
+    }
+
+    public CalendarioLetivoModel save(CalendarioLetivoModel calendario) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'save'");
+    }
+
+    public void deleteById(Integer id) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'deleteById'");
     }
 }
