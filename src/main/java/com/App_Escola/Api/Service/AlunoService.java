@@ -24,7 +24,7 @@ public class AlunoService {
     }
 
     public Optional<AlunoModel> buscarPorMatricula(Integer matricula) {
-        return alunoRepository.findByMatricula(matricula);
+        return alunoRepository.findById(matricula);
     }
 
     public AlunoModel salvar(AlunoModel aluno) {
