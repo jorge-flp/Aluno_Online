@@ -1,6 +1,7 @@
 package com.App_Escola.Api.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.hibernate.internal.build.AllowNonPortable;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,11 @@ public class DisciplinaService {
 
     public void deletar(Integer id) {
         disciplinaRepository.deleteById(id);
+    }
+
+    public Optional<DisciplinaModel> buscarPorId(Integer id) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'buscarPorId'");
     }
 
 }
