@@ -4,15 +4,20 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.hibernate.internal.build.AllowNonPortable;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.App_Escola.Api.Repository.TurmaRepository;
+
+import lombok.AllArgsConstructor;
+
 import com.App_Escola.Api.Model.TurmaModel;
 
 @Service
+@AllArgsConstructor
+@AllowNonPortable
 public class TurmaService {
 
-    @Autowired
     private TurmaRepository turmaRepository;
 
     public List<TurmaModel> ListarTurmas() {
