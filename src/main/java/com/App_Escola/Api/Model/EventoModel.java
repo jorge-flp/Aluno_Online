@@ -23,7 +23,7 @@ public class EventoModel {
 
     @ManyToOne
     @JoinColumn(name = "id_calendario", nullable = false)
-    private CalendarioModel calendarioLetivo;
+    private CalendarioLetivoModel calendarioLetivo;
 
     public EventoModel() {
     }
@@ -61,11 +61,11 @@ public class EventoModel {
         this.tipo = tipo;
     }
 
-    public CalendarioModel getCalendarioLetivo() {
-        CalendarioModel calendarioModel = null;
+    public CalendarioLetivoModel getCalendarioLetivo() {
+        CalendarioLetivoModel calendarioModel = null;
         return calendarioModel;
     }
 
-    public void setCalendarioLetivo(CalendarioModel calendarioLetivo) {
+    public void setCalendarioLetivo(CalendarioLetivoModel calendarioLetivo) {
     }
 }
