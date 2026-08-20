@@ -2,9 +2,9 @@ package com.App_Escola.Api.Service;
 
 import java.util.List;
 import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.App_Escola.Api.Model.CalendarioLetivoModel;
+import com.App_Escola.Api.Repository.CalendarioLetivoRepository;
 
 import lombok.AllArgsConstructor;
 
@@ -12,7 +12,8 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class CalendarioLetivoService {
 
-    private CalendarioLetivoModel calendarioLetivoRepository;
+    // CORRIGIDO: O tipo agora é o Repository, e não a Model
+    private final CalendarioLetivoRepository calendarioLetivoRepository;
 
     public List<CalendarioLetivoModel> listarTodos() {
         return calendarioLetivoRepository.findAll();
