@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CalendarioLetivoRepository extends JpaRepository<CalendaLetivorioModel, Integer> {
+public interface CalendarioLetivoRepository extends JpaRepository<CalendarioLetivoModel, Integer> {
 }

@@ -6,15 +6,14 @@ import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
 
-
 @Entity
 @Getter
 @Setter
 public class EscolaModel {
-    
+
     @Id
     @Column(length = 8)
-    private String inep;
+    private Integer inep;
 
     @Column(nullable = false, length = 150)
     private String nome;

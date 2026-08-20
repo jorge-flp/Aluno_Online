@@ -23,7 +23,7 @@ public class EscolaService {
         return escolaRepository.findAll();
     }
 
-    public Optional<EscolaModel> BuscarEscolaPorInep(String inep) {
+    public Optional<EscolaModel> BuscarEscolaPorInep(Integer inep) {
         return escolaRepository.findById(inep);
     }
 
@@ -31,7 +31,7 @@ public class EscolaService {
         return escolaRepository.save(escola);
     }
 
-    public void DeletarEscola(String inep) {
+    public void DeletarEscola(Integer inep) {
         escolaRepository.deleteById(inep);
     }
 }
