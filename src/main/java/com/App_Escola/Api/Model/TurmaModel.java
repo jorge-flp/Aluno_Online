@@ -17,18 +17,18 @@ public class TurmaModel {
     private Integer id_turma;
 
     private String nome;
+
     private String ano_serie;
 
     @ManyToOne
-    @JoinColumn(name = "escola_inep", nullable = false)
+    @JoinColumn(name = "escola_inep", referencedColumnName = "inep", nullable = false)
     private EscolaModel escola;
 
     public TurmaModel() {
     }
 
-    // Getters e Setters
     public Integer getId_turma() {
-        return getId_turma();
+        return id_turma;
     }
 
     public void setId_turma(Integer id_turma) {
@@ -36,7 +36,7 @@ public class TurmaModel {
     }
 
     public String getAno_serie() {
-        return getAno_serie();
+        return ano_serie;
     }
 
     public void setAno_serie(String ano_serie) {
