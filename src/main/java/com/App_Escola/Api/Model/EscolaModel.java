@@ -12,8 +12,8 @@ import lombok.Setter;
 public class EscolaModel {
 
     @Id
-    @Column(length = 8)
-    private Integer inep;
+    @Column(length = 20)
+    private String inep;
 
     @Column(nullable = false, length = 150)
     private String nome;

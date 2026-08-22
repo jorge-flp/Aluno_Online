@@ -17,6 +17,7 @@ public class DisciplinaModel {
     private Integer id_disciplina;
 
     private String nome;
+
     private Integer carga_horaria;
 
     @OneToOne
@@ -26,7 +27,6 @@ public class DisciplinaModel {
     public DisciplinaModel() {
     }
 
-    // Getters e Setters
     public Integer getId_disciplina() {
         return id_disciplina;
     }

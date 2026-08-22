@@ -1,10 +1,15 @@
 package com.App_Escola.Api.Model;
 
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
@@ -21,8 +26,12 @@ public class TurmaModel {
     private String ano_serie;
 
     @ManyToOne
-    @JoinColumn(name = "escola_inep", referencedColumnName = "inep", nullable = false)
+    @JoinColumn(name = "escola_inep", nullable = false)
     private EscolaModel escola;
+
+    @ManyToMany(mappedBy = "turmas")
+    @JsonIgnore
+    private List<ProfessorModel> professores;
 
     public TurmaModel() {
     }
@@ -35,14 +44,6 @@ public class TurmaModel {
         this.id_turma = id_turma;
     }
 
-    public String getAno_serie() {
-        return ano_serie;
-    }
-
-    public void setAno_serie(String ano_serie) {
-        this.ano_serie = ano_serie;
-    }
-
     public String getNome() {
         return nome;
     }
@@ -51,11 +52,27 @@ public class TurmaModel {
         this.nome = nome;
     }
 
+    public String getAno_serie() {
+        return ano_serie;
+    }
+
+    public void setAno_serie(String ano_serie) {
+        this.ano_serie = ano_serie;
+    }
+
     public EscolaModel getEscola() {
         return escola;
     }
 
     public void setEscola(EscolaModel escola) {
         this.escola = escola;
+    }
+
+    public List<ProfessorModel> getProfessores() {
+        return professores;
+    }
+
+    public void setProfessores(List<ProfessorModel> professores) {
+        this.professores = professores;
     }
 }

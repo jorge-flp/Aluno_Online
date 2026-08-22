@@ -1,6 +1,7 @@
 package com.App_Escola.Api.Model;
 
 import java.time.LocalDate;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,7 +19,9 @@ public class EventoModel {
     private Integer id_evento;
 
     private LocalDate data;
+
     private String titulo;
+
     private String tipo;
 
     @ManyToOne
@@ -28,7 +31,6 @@ public class EventoModel {
     public EventoModel() {
     }
 
-    // Getters e Setters
     public Integer getId_evento() {
         return id_evento;
     }
@@ -62,10 +64,10 @@ public class EventoModel {
     }
 
     public CalendarioLetivoModel getCalendarioLetivo() {
-        CalendarioLetivoModel calendarioModel = null;
-        return calendarioModel;
+        return calendarioLetivo;
     }
 
     public void setCalendarioLetivo(CalendarioLetivoModel calendarioLetivo) {
+        this.calendarioLetivo = calendarioLetivo;
     }
 }
