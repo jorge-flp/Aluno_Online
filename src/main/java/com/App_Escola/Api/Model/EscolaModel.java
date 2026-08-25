@@ -29,4 +29,12 @@ public class EscolaModel {
 
     @Column(length = 100)
     private String email;
+
+    public String getInep() {
+        return inep;
+    }
+
+    public void setInep(String inep) {
+        this.inep = inep;
+    }
 }

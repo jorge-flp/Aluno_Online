@@ -26,7 +26,7 @@ public class TurmaModel {
     private String ano_serie;
 
     @ManyToOne
-    @JoinColumn(name = "escola_inep", nullable = false)
+    @JoinColumn(name = "escola_inep", referencedColumnName = "inep", nullable = false)
     private EscolaModel escola;
 
     @ManyToMany(mappedBy = "turmas")
