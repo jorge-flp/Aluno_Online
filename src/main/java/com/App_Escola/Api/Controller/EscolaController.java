@@ -23,7 +23,7 @@ public class EscolaController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EscolaModel> buscarPorId(@PathVariable Integer id) {
+    public ResponseEntity<EscolaModel> buscarPorId(@PathVariable String id) {
         Optional<EscolaModel> escola = repository.findById(id);
         if (escola.isPresent()) {
             return ResponseEntity.ok(escola.get());
@@ -37,7 +37,7 @@ public class EscolaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<EscolaModel> atualizar(@PathVariable Integer id, @RequestBody EscolaModel dados) {
+    public ResponseEntity<EscolaModel> atualizar(@PathVariable String id, @RequestBody EscolaModel dados) {
         Optional<EscolaModel> escola = repository.findById(id);
         if (escola.isPresent()) {
             EscolaModel existente = escola.get();
@@ -48,7 +48,7 @@ public class EscolaController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> excluir(@PathVariable Integer id) {
+    public ResponseEntity<Void> excluir(@PathVariable String id) {
         if (!repository.existsById(id)) {
             return ResponseEntity.notFound().build();
         }

@@ -17,7 +17,7 @@ public class EscolaService {
         return escolaRepository.findAll();
     }
 
-    public Optional<EscolaModel> buscarPorInep(Integer inep) {
+    public Optional<EscolaModel> buscarPorInep(String inep) {
         return escolaRepository.findById(inep);
     }
 
