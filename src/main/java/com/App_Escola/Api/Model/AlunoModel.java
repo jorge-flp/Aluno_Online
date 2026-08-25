@@ -1,6 +1,8 @@
 package com.App_Escola.Api.Model;
 
+
 import jakarta.persistence.Column;
+import jakarta.annotation.Generated;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
