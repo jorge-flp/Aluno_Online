@@ -23,12 +23,12 @@ public class DisciplinaService {
     }
 
     public DisciplinaModel salvar(DisciplinaModel disciplina) {
-        // Validar regras da disciplina no futuro
+        
         return disciplinaRepository.save(disciplina);
     }
 
     public DisciplinaModel atualizar(DisciplinaModel disciplina) {
-        // Validar regras da disciplina no futuro
+        
         return disciplinaRepository.save(disciplina);
     }
 
@@ -37,7 +37,7 @@ public class DisciplinaService {
     }
 
     public Optional<DisciplinaModel> buscarPorId(Integer id) {
-        // TODO Auto-generated method stub
+        
         throw new UnsupportedOperationException("Unimplemented method 'buscarPorId'");
     }
 

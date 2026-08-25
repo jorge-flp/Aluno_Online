@@ -28,8 +28,7 @@ public class AlunoService {
     }
 
     public AlunoModel salvar(AlunoModel aluno) {
-        // Supondo que getTurmaId() retorne o ID diretamente ou que você ajuste para
-        // pegar o ID correto:
+       
         Integer turmaId = aluno.getTurmaId();
 
         System.out.println("=================================");
@@ -39,11 +38,10 @@ public class AlunoService {
         TurmaModel turma = turmaRepository.findById(turmaId)
                 .orElseThrow(() -> new RuntimeException("Turma não encontrada. ID recebido: " + turmaId));
 
-        // Se o seu model aceita o objeto TurmaModel:
+        
         aluno.setTurmaId(turmaId);
 
-        // OU se aceita apenas o ID:
-        // aluno.setTurmaId(turmaId);
+      
 
         return alunoRepository.save(aluno);
     }
