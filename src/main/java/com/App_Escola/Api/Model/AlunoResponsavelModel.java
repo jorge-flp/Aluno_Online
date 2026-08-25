@@ -10,6 +10,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
+
 @Entity
 @Table(name = "aluno_responsavel", uniqueConstraints = {
         @UniqueConstraint(name = "uk_aluno_responsavel", columnNames = { "aluno_matricula", "id_responsavel" })

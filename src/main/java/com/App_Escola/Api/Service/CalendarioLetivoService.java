@@ -12,7 +12,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class CalendarioLetivoService {
 
-    // CORRIGIDO: O tipo agora é o Repository, e não a Model
+    
     private final CalendarioLetivoRepository calendarioLetivoRepository;
 
     public List<CalendarioLetivoModel> listarTodos() {
