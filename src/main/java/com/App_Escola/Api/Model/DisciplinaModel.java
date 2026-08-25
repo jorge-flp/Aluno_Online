@@ -1,11 +1,15 @@
 package com.App_Escola.Api.Model;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -20,9 +24,9 @@ public class DisciplinaModel {
 
     private Integer carga_horaria;
 
-    @OneToOne
-    @JoinColumn(name = "professor_matricula", nullable = false, unique = true)
-    private ProfessorModel professor;
+    @OneToMany(mappedBy = "disciplina")
+    @JsonIgnore
+    private List<ProfessorDisciplinaModel> professores = new ArrayList<>();
 
     public DisciplinaModel() {
     }
@@ -51,11 +55,11 @@ public class DisciplinaModel {
         this.carga_horaria = carga_horaria;
     }
 
-    public ProfessorModel getProfessor() {
-        return professor;
+    public List<ProfessorDisciplinaModel> getProfessores() {
+        return professores;
     }
 
-    public void setProfessor(ProfessorModel professor) {
-        this.professor = professor;
+    public void setProfessores(List<ProfessorDisciplinaModel> professores) {
+        this.professores = professores;
     }
 }
