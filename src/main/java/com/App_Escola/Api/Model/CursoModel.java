@@ -59,4 +59,5 @@ public class CursoModel {
     public void setCarga_horaria(Integer carga_horaria) {
         this.carga_horaria = carga_horaria;
     }
+
 }

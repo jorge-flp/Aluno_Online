@@ -1,9 +1,9 @@
 package com.App_Escola.Api.Repository;
 
-import com.App_Escola.Api.Model.AvisosRepository;
+import com.App_Escola.Api.Model.AvisosModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface AvisosRepository extends JpaRepository<AvisosRepository, Integer> {
+public interface AvisosRepository extends JpaRepository<AvisosModel, Integer> {
 }

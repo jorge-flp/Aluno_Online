@@ -109,4 +109,14 @@ public class AvisosModel {
     public void setTurma(TurmaModel turma) {
         this.turma = turma;
     }
+
+    public Object getData() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getData'");
+    }
+
+    public void setData(Object data) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setData'");
+    }
 }
