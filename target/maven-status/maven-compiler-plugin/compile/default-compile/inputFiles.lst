@@ -19,6 +19,7 @@
 /home/jgkkz/Documentos/Api/src/main/java/com/App_Escola/Api/Controller/ResponsavelController.java
 /home/jgkkz/Documentos/Api/src/main/java/com/App_Escola/Api/Controller/TurmaController.java
 /home/jgkkz/Documentos/Api/src/main/java/com/App_Escola/Api/Controller/TurmaCursoController.java
+/home/jgkkz/Documentos/Api/src/main/java/com/App_Escola/Api/Controller/UsuarioController.java
 /home/jgkkz/Documentos/Api/src/main/java/com/App_Escola/Api/Model/AlunoEmailModel.java
 /home/jgkkz/Documentos/Api/src/main/java/com/App_Escola/Api/Model/AlunoModel.java
 /home/jgkkz/Documentos/Api/src/main/java/com/App_Escola/Api/Model/AlunoResponsavelModel.java
@@ -37,8 +38,10 @@
 /home/jgkkz/Documentos/Api/src/main/java/com/App_Escola/Api/Model/ProfessorDisciplinaModel.java
 /home/jgkkz/Documentos/Api/src/main/java/com/App_Escola/Api/Model/ProfessorModel.java
 /home/jgkkz/Documentos/Api/src/main/java/com/App_Escola/Api/Model/ResponsavelModel.java
+/home/jgkkz/Documentos/Api/src/main/java/com/App_Escola/Api/Model/Role.java
 /home/jgkkz/Documentos/Api/src/main/java/com/App_Escola/Api/Model/TurmaCursoModel.java
 /home/jgkkz/Documentos/Api/src/main/java/com/App_Escola/Api/Model/TurmaModel.java
+/home/jgkkz/Documentos/Api/src/main/java/com/App_Escola/Api/Model/UsuarioModel.java
 /home/jgkkz/Documentos/Api/src/main/java/com/App_Escola/Api/Repository/AlunoEmailRepository.java
 /home/jgkkz/Documentos/Api/src/main/java/com/App_Escola/Api/Repository/AlunoRepository.java
 /home/jgkkz/Documentos/Api/src/main/java/com/App_Escola/Api/Repository/AlunoResponsavelRepository.java
@@ -59,6 +62,7 @@
 /home/jgkkz/Documentos/Api/src/main/java/com/App_Escola/Api/Repository/ResponsavelRepository.java
 /home/jgkkz/Documentos/Api/src/main/java/com/App_Escola/Api/Repository/TurmaCursoRepository.java
 /home/jgkkz/Documentos/Api/src/main/java/com/App_Escola/Api/Repository/TurmaRepository.java
+/home/jgkkz/Documentos/Api/src/main/java/com/App_Escola/Api/Repository/UsuarioRepository.java
 /home/jgkkz/Documentos/Api/src/main/java/com/App_Escola/Api/Service/AlunoResponsavelService.java
 /home/jgkkz/Documentos/Api/src/main/java/com/App_Escola/Api/Service/AlunoService.java
 /home/jgkkz/Documentos/Api/src/main/java/com/App_Escola/Api/Service/AtividadeService.java
@@ -77,3 +81,4 @@
 /home/jgkkz/Documentos/Api/src/main/java/com/App_Escola/Api/Service/ProfessorService.java
 /home/jgkkz/Documentos/Api/src/main/java/com/App_Escola/Api/Service/TurmaCursoService.java
 /home/jgkkz/Documentos/Api/src/main/java/com/App_Escola/Api/Service/TurmaService.java
+/home/jgkkz/Documentos/Api/src/main/java/com/App_Escola/Api/Service/UsuarioService.java
