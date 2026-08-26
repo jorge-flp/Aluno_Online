@@ -20,7 +20,7 @@ public class CalendarioLetivoModel {
     private String periodo;
 
     @OneToOne
-    @JoinColumn(name = "escola_inep", nullable = false, unique = true)
+    @JoinColumn(name = "escola_inep", referencedColumnName = "inep", nullable = false, unique = true)
     private EscolaModel escola;
 
     public CalendarioLetivoModel() {

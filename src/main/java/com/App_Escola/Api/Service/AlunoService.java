@@ -28,20 +28,13 @@ public class AlunoService {
     }
 
     public AlunoModel salvar(AlunoModel aluno) {
-       
-        Integer turmaId = aluno.getTurmaId();
 
-        System.out.println("=================================");
-        System.out.println("ID DA TURMA RECEBIDO: " + turmaId);
-        System.out.println("=================================");
+        if (aluno.getTurmaId() == null) {
+            throw new RuntimeException("O ID da turma é obrigatório");
+        }
 
-        TurmaModel turma = turmaRepository.findById(turmaId)
-                .orElseThrow(() -> new RuntimeException("Turma não encontrada. ID recebido: " + turmaId));
-
-        
-        aluno.setTurmaId(turmaId);
-
-      
+        turmaRepository.findById(aluno.getTurmaId())
+                .orElseThrow(() -> new RuntimeException("Turma não encontrada"));
 
         return alunoRepository.save(aluno);
     }

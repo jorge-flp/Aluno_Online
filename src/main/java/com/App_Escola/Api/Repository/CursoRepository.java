@@ -1,21 +1,9 @@
 package com.App_Escola.Api.Repository;
 
-import com.App_Escola.Api.Model.CursoModel;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
-@Repository
-public interface CursoRepository extends JpaRepository<CursoRepository, Integer> {
+import com.App_Escola.Api.Model.CursoModel;
 
-    CursoModel save(CursoModel curso);
+public interface CursoRepository extends JpaRepository<CursoModel, Integer> {
 
-    void setDisciplina(Object disciplina);
-
-    void setTipo(Object tipo);
-
-    void setCargaHor(Object cargaHor);
-
-    void setIdCur(Integer id_curso);
-
-    void setDescri(String descricao);
 }

@@ -1,11 +1,9 @@
 package com.App_Escola.Api.Repository;
 
-import com.App_Escola.Api.Model.ProfessorDisciplinaModel;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
-@Repository
-public interface ProfessorDisciplinaRepository extends JpaRepository<ProfessorDisciplinaRepository, Integer> {
+import com.App_Escola.Api.Model.ProfessorDisciplinaModel;
 
-    ProfessorDisciplinaModel save(ProfessorDisciplinaModel professorDisciplina);
+public interface ProfessorDisciplinaRepository
+        extends JpaRepository<ProfessorDisciplinaModel, Integer> {
 }
