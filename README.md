@@ -1,4 +1,4 @@
-🎓 Aluno Online — Backend
+🎓 ##Aluno Online — Backend##
 
 API REST do sistema escolar Aluno Online
 Desenvolvida para centralizar regras de negócio, persistência, segurança e integração com o frontend em React.
@@ -9,13 +9,13 @@ Java 21 · Spring Boot 4.1 · JPA/Hibernate · MySQL 8 · Spring Security · Mav
 
 </div>
 
-📌 Visão geral
+📌 ##Visão geral##
 
 O Aluno Online é uma plataforma voltada ao gerenciamento de informações escolares. O backend fornece uma API REST para operações relacionadas a alunos, professores, turmas, disciplinas, responsáveis, avaliações, notas, frequência, histórico escolar, cursos e avisos.
 
 O projeto está sendo desenvolvido por uma equipe de aproximadamente 8 estagiários, portanto a organização por camadas, padronização do código, segurança e controle de versão são prioridades do desenvolvimento.
 
-🏗️ Arquitetura
+🏗️ ##Arquitetura##
 
                          ┌─────────────────────┐
                          │       React         │
@@ -49,33 +49,33 @@ O projeto está sendo desenvolvido por uma equipe de aproximadamente 8 estagiár
             │  MySQL 8  │
             └───────────┘
 
-Camadas
+##Camadas##
 
-Camada
+##Camada##
 
-Responsabilidade
+##Responsabilidade##
 
-Controller
+##Controller##
 
-Receber requisições HTTP e retornar respostas da API.
+##Receber requisições HTTP e retornar respostas da API.##
 
-Service
+##Service##
 
-Concentrar regras de negócio e validações.
+##Concentrar regras de negócio e validações.##
 
-Repository
+##Repository##
 
-Realizar o acesso aos dados com Spring Data JPA.
+##Realizar o acesso aos dados com Spring Data JPA.##
 
-Model
+##Model##
 
-Representar entidades, atributos e relacionamentos JPA.
+##Representar entidades, atributos e relacionamentos JPA.##
 
-Config
+##Config##
 
-Centralizar configurações da aplicação, incluindo segurança.
+##Centralizar configurações da aplicação, incluindo segurança.##
 
-📂 Estrutura do projeto
+📂 ##Estrutura do projeto##
 
 Api/
 ├── .github/
@@ -98,7 +98,7 @@ Api/
 ├── mvnw.cmd
 └── README.md
 
-🧰 Stack tecnológica
+🧰 ##Stack tecnológica##
 
 ☕ Java 21
 
@@ -122,9 +122,9 @@ Api/
 
 🧪 Thunder Client para testes
 
-🗃️ Domínio do sistema
+🗃️ ##Domínio do sistema##
 
-Entidades principais
+#Entidades principais#
 
 Aluno
 AlunoEmail
@@ -147,7 +147,7 @@ HistoricoEscolar
 Avisos
 Escola
 
-Relacionamentos principais
+##Relacionamentos principais##
 
 Escola 1:N Turma
 Escola 1:N Professor
@@ -176,7 +176,7 @@ CalendarioLetivo 1:N Evento
 Escola 1:N Avisos
 Turma 0:N Avisos
 
-👨‍🏫 Professor × Disciplina
+👨‍🏫 ##Professor × Disciplina##
 
 O vínculo entre professor e disciplina é representado por uma entidade associativa própria:
 
@@ -190,7 +190,7 @@ ProfessorDisciplina
    │
 Disciplina
 
-Tabela correspondente:
+##Tabela correspondente:##
 
 professor_disciplina
 ├── id_professor_disciplina
@@ -201,7 +201,7 @@ professor_disciplina
 
 Isso evita prender uma disciplina a um único professor e permite evolução futura da relação.
 
-👨‍🏫 Professor × Turma
+👨‍🏫 ##Professor × Turma##
 
 A associação atual utiliza a tabela intermediária professor_turma:
 
@@ -209,7 +209,7 @@ Professor N:N Turma
 
 A relação é mapeada com JPA e não exige uma classe ProfessorTurmaModel enquanto a associação não possuir atributos próprios.
 
-👨‍👩‍👧 Aluno × Responsável
+👨‍👩‍👧 ##Aluno × Responsável##
 
 Foi adotada uma entidade associativa para permitir informações próprias do vínculo:
 
@@ -220,7 +220,7 @@ Exemplos de atributos da associação:
 parentesco
 responsavel_principal
 
-🗄️ Banco de dados
+🗄️ ##Banco de dados##
 
 Banco atual
 
@@ -251,7 +251,7 @@ A tabela duplicada escola_model foi identificada como legado do mapeamento anter
 
 ⚠️ Importante: durante o desenvolvimento, o banco passou por alterações manuais. Antes de compartilhar a base com toda a equipe ou colocar o sistema em produção, recomenda-se consolidar o histórico em migrations versionadas (por exemplo, Flyway ou Liquibase).
 
-🔐 Segurança
+🔐 ##Segurança##
 
 O projeto já utiliza Spring Security e a arquitetura definitiva de autenticação está sendo construída.
 
@@ -264,23 +264,23 @@ ROLE_RESPONSAVEL
 
 Regras principais
 
-Perfil
+##Perfil##
 
 Exemplos de permissões
 
-ADMIN
+##ADMIN##
 
 Cadastrar aluno, professor e responsável; administrar dados da escola.
 
-PROFESSOR
+##PROFESSOR##
 
 Trabalhar com notas, frequência, atividades e alunos de suas turmas.
 
-ALUNO
+##ALUNO##
 
 Consultar seus próprios dados, notas, frequência, atividades e avisos permitidos.
 
-RESPONSAVEL
+##RESPONSAVEL##
 
 Consultar informações dos alunos aos quais está vinculado.
 
@@ -315,7 +315,7 @@ A autorização deverá ser aplicada no backend, independentemente dos controles
 
 ⚠️ A configuração permitAll() usada durante o desenvolvimento é temporária e não deve ser utilizada em produção.
 
-🌐 Integração com React
+🌐 ##Integração com React##
 
 O frontend é desenvolvido em React e consome o backend por HTTP/JSON.
 
@@ -343,9 +343,9 @@ Backend  → http://localhost:8080
 
 A configuração de CORS deverá permitir somente as origens necessárias.
 
-🧪 Testes da API
+🧪 ##Testes da API##
 
-Ferramentas utilizadas:
+#Ferramentas utilizadas:#
 
 Thunder Client
 
@@ -353,7 +353,7 @@ Postman
 
 Insomnia
 
-Exemplos:
+##Exemplos:##
 
 GET http://localhost:8080/aluno
 
@@ -371,9 +371,9 @@ Exemplo de payload:
   }
 }
 
-🚀 Como executar
+🚀 ##Como executar##
 
-Pré-requisitos
+#Pré-requisitos#
 
 Java 21
 
@@ -391,17 +391,17 @@ Verificar Maven
 
 mvn -version
 
-Executar o backend
+##Executar o backend##
 
 cd ~/Documentos/Api
 mvn clean
 mvn spring-boot:run
 
-Por padrão:
+##Por padrão:##
 
 http://localhost:8080
 
-🔧 Configuração
+🔧 ##Configuração##
 
 As configurações da aplicação ficam em:
 
@@ -409,7 +409,7 @@ src/main/resources/application.properties
 
 Credenciais e segredos não devem ser versionados no Git. Para ambientes compartilhados e produção, a recomendação é utilizar variáveis de ambiente ou um serviço de gerenciamento de secrets.
 
-🌿 Git e colaboração
+🌿 ##Git e colaboração##
 
 O backend está sendo desenvolvido por uma equipe de aproximadamente 8 estagiários.
 
