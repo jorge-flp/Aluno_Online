@@ -1,81 +1,104 @@
-🎓 ##Aluno Online — Backend##
+🎓 Aluno Online — Backend
 
-API REST do sistema escolar Aluno Online
-Desenvolvida para centralizar regras de negócio, persistência, segurança e integração com o frontend em React.
+API REST do sistema escolar Aluno Online, desenvolvida para centralizar regras de negócio, persistência de dados, segurança e integração com o frontend em React.
 
-<div align="center">
+Java 21 · Spring Boot 4.1.0 · JPA/Hibernate · MySQL 8 · Spring Security · Maven
 
-Java 21 · Spring Boot 4.1 · JPA/Hibernate · MySQL 8 · Spring Security · Maven
+📌 Visão geral
 
-</div>
+O Aluno Online é uma plataforma voltada ao gerenciamento de informações escolares.
 
-📌 ##Visão geral##
+O backend disponibiliza uma API REST para operações relacionadas a:
 
-O Aluno Online é uma plataforma voltada ao gerenciamento de informações escolares. O backend fornece uma API REST para operações relacionadas a alunos, professores, turmas, disciplinas, responsáveis, avaliações, notas, frequência, histórico escolar, cursos e avisos.
+Alunos
 
-O projeto está sendo desenvolvido por uma equipe de aproximadamente 8 estagiários, portanto a organização por camadas, padronização do código, segurança e controle de versão são prioridades do desenvolvimento.
+Professores
 
-🏗️ ##Arquitetura##
+Turmas
 
-                         ┌─────────────────────┐
-                         │       React         │
-                         │     Frontend        │
-                         └──────────┬──────────┘
-                                    │
-                              HTTP / JSON
-                                    │
-                                    ▼
-                         ┌─────────────────────┐
-                         │    Spring Boot      │
-                         │        API          │
-                         └──────────┬──────────┘
-                                    │
-                 ┌──────────────────┼──────────────────┐
-                 │                  │                  │
-                 ▼                  ▼                  ▼
-            Controller          Security            Config
-                 │
-                 ▼
-              Service
-                 │
-                 ▼
-             Repository
-                 │
-                 ▼
-           JPA / Hibernate
-                 │
-                 ▼
-            ┌───────────┐
-            │  MySQL 8  │
-            └───────────┘
+Disciplinas
 
-##Camadas##
+Responsáveis
 
-##Camada##
+Avaliações
 
-##Responsabilidade##
+Notas
 
-##Controller##
+Frequência
 
-##Receber requisições HTTP e retornar respostas da API.##
+Histórico escolar
 
-##Service##
+Cursos
 
-##Concentrar regras de negócio e validações.##
+Avisos
 
-##Repository##
+Calendário letivo
 
-##Realizar o acesso aos dados com Spring Data JPA.##
+Eventos
 
-##Model##
+O projeto está sendo desenvolvido por uma equipe de aproximadamente 8 estagiários. Por isso, organização em camadas, padronização do código, segurança e controle de versão são prioridades.
 
-##Representar entidades, atributos e relacionamentos JPA.##
+🏗️ Arquitetura
 
-##Config##
+                     ┌─────────────────────┐
+                     │       React         │
+                     │     Frontend        │
+                     └──────────┬──────────┘
+                                │
+                           HTTP / JSON
+                                │
+                                ▼
+                     ┌─────────────────────┐
+                     │    Spring Boot      │
+                     │        API          │
+                     └──────────┬──────────┘
+                                │
+             ┌──────────────────┼──────────────────┐
+             │                  │                  │
+             ▼                  ▼                  ▼
+        Controller          Security            Config
+             │
+             ▼
+          Service
+             │
+             ▼
+         Repository
+             │
+             ▼
+       JPA / Hibernate
+             │
+             ▼
+        ┌───────────┐
+        │  MySQL 8  │
+        └───────────┘
 
-##Centralizar configurações da aplicação, incluindo segurança.##
+Camadas
 
-📂 ##Estrutura do projeto##
+Camada
+
+Responsabilidade
+
+Controller
+
+Receber requisições HTTP e retornar respostas da API.
+
+Service
+
+Concentrar regras de negócio e validações.
+
+Repository
+
+Realizar o acesso aos dados com Spring Data JPA.
+
+Model
+
+Representar entidades, atributos e relacionamentos JPA.
+
+Config
+
+Centralizar configurações da aplicação, incluindo segurança.
+
+📂 Estrutura do projeto
 
 Api/
 ├── .github/
@@ -83,48 +106,78 @@ Api/
 ├── .vscode/
 ├── src/
 │   ├── main/
-│   │   ├── java/com/App_Escola/Api/
-│   │   │   ├── Config/
-│   │   │   ├── Controller/
-│   │   │   ├── Model/
-│   │   │   ├── Repository/
-│   │   │   ├── Service/
-│   │   │   └── ApiApplication.java
+│   │   ├── java/
+│   │   │   └── com/App_Escola/Api/
+│   │   │       ├── Config/
+│   │   │       ├── Controller/
+│   │   │       ├── Model/
+│   │   │       ├── Repository/
+│   │   │       ├── Service/
+│   │   │       └── ApiApplication.java
+│   │   │
 │   │   └── resources/
 │   │       └── application.properties
+│   │
 │   └── test/
+│
 ├── pom.xml
 ├── mvnw
 ├── mvnw.cmd
 └── README.md
 
-🧰 ##Stack tecnológica##
+🧰 Stack tecnológica
+
+Tecnologia
+
+Utilização
 
 ☕ Java 21
 
+Linguagem principal
+
 🍃 Spring Boot 4.1.0
+
+Framework principal
 
 🌐 Spring Web / REST
 
+Criação da API
+
 🗄️ Spring Data JPA
+
+Persistência de dados
 
 🔗 Hibernate ORM
 
+Mapeamento objeto-relacional
+
 🔐 Spring Security
+
+Autenticação e autorização
 
 🐬 MySQL 8.0
 
+Banco de dados
+
 📦 Maven
+
+Build e gerenciamento de dependências
 
 🧩 Lombok
 
-⚛️ React no frontend
+Redução de código repetitivo
 
-🧪 Thunder Client para testes
+⚛️ React
 
-🗃️ ##Domínio do sistema##
+Frontend
 
-#Entidades principais#
+🧪 Thunder Client
+
+Testes da API
+
+🗃️ Domínio do sistema
+
+Entidades principais
 
 Aluno
 AlunoEmail
@@ -147,14 +200,16 @@ HistoricoEscolar
 Avisos
 Escola
 
-##Relacionamentos principais##
+🔗 Relacionamentos principais
 
 Escola 1:N Turma
 Escola 1:N Professor
-Escola 1:1 CalendarioLetivo       (modelo atual)
+Escola 1:1 CalendarioLetivo
 
 Turma 1:N Aluno
-Turma N:1 Curso                  (por meio de TurmaCurso)
+Turma N:N Curso
+        │
+        └── TurmaCurso
 
 Professor N:N Turma
 Professor 1:N ProfessorDisciplina
@@ -163,7 +218,7 @@ Disciplina 1:N ProfessorDisciplina
 Aluno 1:N AlunoEmail
 Aluno 1:N AlunoResponsavel
 Responsavel 1:N AlunoResponsavel
-Aluno 1:1 Boletim                 (modelo atual)
+Aluno 1:1 Boletim
 Aluno 1:N Frequencia
 Aluno 1:N HistoricoEscolar
 
@@ -176,7 +231,7 @@ CalendarioLetivo 1:N Evento
 Escola 1:N Avisos
 Turma 0:N Avisos
 
-👨‍🏫 ##Professor × Disciplina##
+👨‍🏫 Professor × Disciplina
 
 O vínculo entre professor e disciplina é representado por uma entidade associativa própria:
 
@@ -190,7 +245,7 @@ ProfessorDisciplina
    │
 Disciplina
 
-##Tabela correspondente:##
+Tabela correspondente
 
 professor_disciplina
 ├── id_professor_disciplina
@@ -199,35 +254,54 @@ professor_disciplina
 ├── data_inicio
 └── data_fim
 
-Isso evita prender uma disciplina a um único professor e permite evolução futura da relação.
+Essa estrutura evita prender uma disciplina a um único professor e permite evolução futura da relação.
 
-👨‍🏫 ##Professor × Turma##
+👨‍🏫 Professor × Turma
 
-A associação atual utiliza a tabela intermediária professor_turma:
+A associação atual utiliza a tabela intermediária:
+
+professor_turma
+
+Relacionamento:
 
 Professor N:N Turma
 
 A relação é mapeada com JPA e não exige uma classe ProfessorTurmaModel enquanto a associação não possuir atributos próprios.
 
-👨‍👩‍👧 ##Aluno × Responsável##
+👨‍👩‍👧 Aluno × Responsável
 
 Foi adotada uma entidade associativa para permitir informações próprias do vínculo:
 
 Aluno 1:N AlunoResponsavel N:1 Responsavel
 
-Exemplos de atributos da associação:
+Exemplos de atributos da associação
 
 parentesco
 responsavel_principal
 
-🗄️ ##Banco de dados##
+🗄️ Banco de dados
 
-Banco atual
+Configuração atual
 
-SGBD:     MySQL 8.0
-Database: aluno_online
-Host:     localhost
-Porta:    3306
+Item
+
+Valor
+
+SGBD
+
+MySQL 8.0
+
+Database
+
+aluno_online
+
+Host
+
+localhost
+
+Porta
+
+3306
 
 Conexão utilizada durante o desenvolvimento:
 
@@ -237,7 +311,7 @@ Ajustes importantes já realizados
 
 professor.id_professor foi padronizado para professor.matricula.
 
-professor.data_nascimento foi convertido para o tipo DATE.
+professor.data_nascimento foi convertido para DATE.
 
 O relacionamento antigo disciplina.professor_matricula foi removido.
 
@@ -249,9 +323,9 @@ As referências de professor, turma e calendario_letivo foram direcionadas para 
 
 A tabela duplicada escola_model foi identificada como legado do mapeamento anterior e está sendo eliminada da estrutura definitiva.
 
-⚠️ Importante: durante o desenvolvimento, o banco passou por alterações manuais. Antes de compartilhar a base com toda a equipe ou colocar o sistema em produção, recomenda-se consolidar o histórico em migrations versionadas (por exemplo, Flyway ou Liquibase).
+⚠️ Importante: durante o desenvolvimento, o banco passou por alterações manuais. Antes de compartilhar a base com toda a equipe ou colocar o sistema em produção, recomenda-se consolidar o histórico em migrations versionadas, como Flyway ou Liquibase.
 
-🔐 ##Segurança##
+🔐 Segurança
 
 O projeto já utiliza Spring Security e a arquitetura definitiva de autenticação está sendo construída.
 
@@ -264,23 +338,23 @@ ROLE_RESPONSAVEL
 
 Regras principais
 
-##Perfil##
+Perfil
 
 Exemplos de permissões
 
-##ADMIN##
+ADMIN
 
 Cadastrar aluno, professor e responsável; administrar dados da escola.
 
-##PROFESSOR##
+PROFESSOR
 
 Trabalhar com notas, frequência, atividades e alunos de suas turmas.
 
-##ALUNO##
+ALUNO
 
 Consultar seus próprios dados, notas, frequência, atividades e avisos permitidos.
 
-##RESPONSAVEL##
+RESPONSAVEL
 
 Consultar informações dos alunos aos quais está vinculado.
 
@@ -298,14 +372,14 @@ Validação de credenciais
 JWT
   │
   ▼
-Authorization: Bearer <token>
+Authorization: Bearer
   │
   ▼
 Autorização por role e recurso
 
-Regra de negócio crítica
+Regra crítica
 
-Somente usuários com ROLE_ADMIN deverão ter permissão para operações administrativas como:
+Somente usuários com ROLE_ADMIN deverão ter permissão para operações administrativas, como:
 
 POST /aluno/cadastrar
 POST /professor/cadastrar
@@ -313,13 +387,11 @@ POST /responsavel/cadastrar
 
 A autorização deverá ser aplicada no backend, independentemente dos controles de interface existentes no React.
 
-⚠️ A configuração permitAll() usada durante o desenvolvimento é temporária e não deve ser utilizada em produção.
+⚠️ A configuração permitAll() utilizada durante o desenvolvimento é temporária e não deve ser utilizada em produção.
 
-🌐 ##Integração com React##
+🌐 Integração com React
 
 O frontend é desenvolvido em React e consome o backend por HTTP/JSON.
-
-Exemplo:
 
 React
   │
@@ -336,16 +408,16 @@ AlunoRepository
   ▼
 MySQL
 
-Durante o desenvolvimento local:
+Desenvolvimento local
 
 Frontend → http://localhost:5173
 Backend  → http://localhost:8080
 
 A configuração de CORS deverá permitir somente as origens necessárias.
 
-🧪 ##Testes da API##
+🧪 Testes da API
 
-#Ferramentas utilizadas:#
+Ferramentas utilizadas
 
 Thunder Client
 
@@ -353,14 +425,14 @@ Postman
 
 Insomnia
 
-##Exemplos:##
+Exemplos
 
 GET http://localhost:8080/aluno
 
 POST http://localhost:8080/aluno/cadastrar
 Content-Type: application/json
 
-Exemplo de payload:
+Payload de exemplo:
 
 {
   "nome": "João",
@@ -371,9 +443,9 @@ Exemplo de payload:
   }
 }
 
-🚀 ##Como executar##
+🚀 Como executar
 
-#Pré-requisitos#
+Pré-requisitos
 
 Java 21
 
@@ -391,45 +463,53 @@ Verificar Maven
 
 mvn -version
 
-##Executar o backend##
+▶️ Executar o backend
 
 cd ~/Documentos/Api
 mvn clean
 mvn spring-boot:run
 
-##Por padrão:##
+Por padrão:
 
 http://localhost:8080
 
-🔧 ##Configuração##
+🔧 Configuração
 
 As configurações da aplicação ficam em:
 
 src/main/resources/application.properties
 
-Credenciais e segredos não devem ser versionados no Git. Para ambientes compartilhados e produção, a recomendação é utilizar variáveis de ambiente ou um serviço de gerenciamento de secrets.
+Credenciais e segredos não devem ser versionados no Git.
 
-🌿 ##Git e colaboração##
+Para ambientes compartilhados e produção, recomenda-se utilizar:
+
+Variáveis de ambiente
+
+Secrets
+
+Serviços de gerenciamento de segredos
+
+🌿 Git e colaboração
 
 O backend está sendo desenvolvido por uma equipe de aproximadamente 8 estagiários.
 
-Fluxo recomendado:
+Fluxo recomendado
 
-Branch de feature
-       │
-       ▼
+Feature Branch
+      │
+      ▼
 Desenvolvimento
-       │
-       ▼
+      │
+      ▼
 Pull Request
-       │
-       ▼
+      │
+      ▼
 Revisão
-       │
-       ▼
+      │
+      ▼
 Merge
 
-Exemplo:
+Exemplo
 
 git add .
 git commit -m "feat: adiciona autenticação"
@@ -442,28 +522,28 @@ Cada alteração relevante deve ser validada localmente antes de ser integrada �
 Desenvolvimento atual
 
 Cada desenvolvedor
-       │
-       ▼
-API local
-       │
-       ▼
-MySQL local
+        │
+        ▼
+     API local
+        │
+        ▼
+    MySQL local
 
 Evolução planejada
 
-                    ┌──────────────┐
-                    │    DEV       │
-                    └──────┬───────┘
-                           │
-                           ▼
-                    ┌──────────────┐
-                    │   STAGING    │
-                    └──────┬───────┘
-                           │
-                           ▼
-                    ┌──────────────┐
-                    │  PRODUÇÃO    │
-                    └──────────────┘
+                ┌──────────────┐
+                │     DEV      │
+                └──────┬───────┘
+                       │
+                       ▼
+                ┌──────────────┐
+                │   STAGING    │
+                └──────┬───────┘
+                       │
+                       ▼
+                ┌──────────────┐
+                │  PRODUÇÃO    │
+                └──────────────┘
 
 Quando houver infraestrutura e orçamento adequados, o banco compartilhado e a produção poderão ser migrados para uma solução gerenciada em nuvem, mantendo ambientes separados.
 
@@ -471,7 +551,7 @@ Quando houver infraestrutura e orçamento adequados, o banco compartilhado e a p
 
 Além de Spring Security e JWT, a arquitetura deverá evoluir com:
 
-🔑 Senhas armazenadas somente como hash seguro (ex.: BCrypt).
+🔑 Senhas armazenadas somente como hash seguro, como BCrypt.
 
 🎫 JWT com validação adequada.
 
@@ -497,38 +577,65 @@ Além de Spring Security e JWT, a arquitetura deverá evoluir com:
 
 📋 Próximas etapas
 
-[ ] Finalizar revisão de Models e relacionamentos JPA
-[ ] Consolidar banco em migrations
-[ ] Revisar Repositories
-[ ] Revisar Services
-[ ] Revisar Controllers
+🧱 Backend
 
-[ ] UsuarioModel
-[ ] Role
-[ ] PasswordEncoder
-[ ] Login
-[ ] JWT
-[ ] Autorização por role
-[ ] Autorização por recurso
+Finalizar revisão dos Models e relacionamentos JPA
 
-[ ] DTOs
-[ ] Bean Validation
-[ ] Tratamento global de exceções
-[ ] CORS definitivo
-[ ] Auditoria
-[ ] Rate limiting
+Consolidar banco em migrations
 
-[ ] Integração completa com React
-[ ] Ambiente compartilhado de desenvolvimento
-[ ] CI/CD
-[ ] Staging
-[ ] Deploy de produção
+Revisar Repositories
+
+Revisar Services
+
+Revisar Controllers
+
+🔐 Autenticação e autorização
+
+UsuarioModel
+
+Role
+
+PasswordEncoder
+
+Login
+
+JWT
+
+Autorização por role
+
+Autorização por recurso
+
+🛡️ Hardening da API
+
+DTOs
+
+Bean Validation
+
+Tratamento global de exceções
+
+CORS definitivo
+
+Auditoria
+
+Rate limiting
+
+🚀 Infraestrutura
+
+Integração completa com React
+
+Ambiente compartilhado de desenvolvimento
+
+CI/CD
+
+Staging
+
+Deploy de produção
 
 📊 Status do projeto
 
 🟡 Em desenvolvimento ativo
 
-Já estruturado
+✅ Já estruturado
 
 ✅ Projeto Maven/Spring Boot
 
@@ -550,7 +657,7 @@ Já estruturado
 
 ✅ Integração planejada com React
 
-Em implementação
+🔄 Em implementação
 
 🔄 Autenticação completa
 
@@ -568,8 +675,25 @@ Em implementação
 
 Projeto desenvolvido por uma equipe de aproximadamente 8 estagiários.
 
-A organização do backend segue uma arquitetura em camadas para facilitar manutenção, colaboração, testes e evolução do sistema.
+A organização do backend segue uma arquitetura em camadas para facilitar:
+
+Manutenção
+
+Colaboração
+
+Testes
+
+Revisão de código
+
+Evolução do sistema
 
 📎 Observação final
 
-Este README descreve o estado atual e a direção arquitetural do backend. Funcionalidades marcadas como planejamento ou implementação não devem ser consideradas concluídas até que sejam validadas e integradas ao projeto.
+Este README descreve o estado atual e a direção arquitetural do backend.
+
+Funcionalidades marcadas como planejamento ou implementação não devem ser consideradas concluídas até que sejam devidamente desenvolvidas, testadas e integradas ao projeto.
+
+📌 Links
+
+Repositório:
+https://github.com/jorge-flp/Aluno_Online
