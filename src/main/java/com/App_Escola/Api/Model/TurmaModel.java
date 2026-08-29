@@ -25,10 +25,6 @@ public class TurmaModel {
 
     private String ano_serie;
 
-    @ManyToOne
-    @JoinColumn(name = "escola_inep", referencedColumnName = "inep", nullable = false)
-    private EscolaModel escola;
-
     @ManyToMany(mappedBy = "turmas")
     @JsonIgnore
     private List<ProfessorModel> professores;
@@ -58,14 +54,6 @@ public class TurmaModel {
 
     public void setAno_serie(String ano_serie) {
         this.ano_serie = ano_serie;
-    }
-
-    public EscolaModel getEscola() {
-        return escola;
-    }
-
-    public void setEscola(EscolaModel escola) {
-        this.escola = escola;
     }
 
     public List<ProfessorModel> getProfessores() {

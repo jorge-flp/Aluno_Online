@@ -38,7 +38,6 @@ public class AvisosService {
             avisoExistente.setTitulo(dados.getTitulo());
             avisoExistente.setMensagem(dados.getMensagem());
             avisoExistente.setData(dados.getData());
-            avisoExistente.setEscola(dados.getEscola());
 
             return avisoRepository.save(avisoExistente);
         }

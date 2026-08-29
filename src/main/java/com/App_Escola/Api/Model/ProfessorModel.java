@@ -26,10 +26,6 @@ public class ProfessorModel {
 
     private LocalDate data_nascimento;
 
-    @ManyToOne
-    @JoinColumn(name = "escola_inep", nullable = false)
-    private EscolaModel escola;
-
     @ManyToMany
     @JoinTable(name = "professor_turma", joinColumns = @JoinColumn(name = "professor_matricula"), inverseJoinColumns = @JoinColumn(name = "id_turma"))
     @JsonIgnore
@@ -68,14 +64,6 @@ public class ProfessorModel {
 
     public void setData_nascimento(LocalDate data_nascimento) {
         this.data_nascimento = data_nascimento;
-    }
-
-    public EscolaModel getEscola() {
-        return escola;
-    }
-
-    public void setEscola(EscolaModel escola) {
-        this.escola = escola;
     }
 
     public List<TurmaModel> getTurmas() {

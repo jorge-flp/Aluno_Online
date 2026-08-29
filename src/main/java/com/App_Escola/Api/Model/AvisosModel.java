@@ -36,10 +36,6 @@ public class AvisosModel {
     private Boolean ativo = true;
 
     @ManyToOne
-    @JoinColumn(name = "escola_inep", nullable = false)
-    private EscolaModel escola;
-
-    @ManyToOne
     @JoinColumn(name = "id_turma")
     private TurmaModel turma;
 
@@ -92,14 +88,6 @@ public class AvisosModel {
 
     public void setAtivo(Boolean ativo) {
         this.ativo = ativo;
-    }
-
-    public EscolaModel getEscola() {
-        return escola;
-    }
-
-    public void setEscola(EscolaModel escola) {
-        this.escola = escola;
     }
 
     public TurmaModel getTurma() {
