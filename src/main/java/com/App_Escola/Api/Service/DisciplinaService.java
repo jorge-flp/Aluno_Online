@@ -16,29 +16,36 @@ import lombok.AllArgsConstructor;
 @AllowNonPortable
 public class DisciplinaService {
 
-    private final DisciplinaRepository disciplinaRepository;
+    private DisciplinaRepository disciplinaRepository;
 
-    public List<DisciplinaModel> listarTodos() {
+    public List<DisciplinaModel> listarTodas() {
         return disciplinaRepository.findAll();
     }
 
+    public Optional<DisciplinaModel> buscarPorId(Integer id) {
+        return disciplinaRepository.findById(id);
+    }
+
     public DisciplinaModel salvar(DisciplinaModel disciplina) {
-        
         return disciplinaRepository.save(disciplina);
     }
 
-    public DisciplinaModel atualizar(DisciplinaModel disciplina) {
-        
-        return disciplinaRepository.save(disciplina);
+    public DisciplinaModel atualizar(Integer id, DisciplinaModel dados) {
+        Optional<DisciplinaModel> disciplinaOpt = disciplinaRepository.findById(id);
+
+        if (disciplinaOpt.isPresent()) {
+            DisciplinaModel disciplinaExistente = disciplinaOpt.get();
+            disciplinaExistente.setNome(dados.getNome());
+            disciplinaExistente.setDescricao(dados.getDescricao());
+            disciplinaExistente.setCargaHoraria(dados.getCargaHoraria());
+
+            return disciplinaRepository.save(disciplinaExistente);
+        }
+
+        return null;
     }
 
     public void deletar(Integer id) {
         disciplinaRepository.deleteById(id);
     }
-
-    public Optional<DisciplinaModel> buscarPorId(Integer id) {
-        
-        throw new UnsupportedOperationException("Unimplemented method 'buscarPorId'");
-    }
-
 }

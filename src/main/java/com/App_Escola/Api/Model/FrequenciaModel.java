@@ -1,6 +1,7 @@
 package com.App_Escola.Api.Model;
 
 import java.time.LocalDate;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -8,67 +9,31 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
-@Table(name = "frequencia")
+@Table(name = "frequencias")
 public class FrequenciaModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id_frequencia;
+    private Integer id;
 
     private LocalDate data;
-    private Boolean presenca = true;
 
+    private Boolean presente; // true para presente, false para falta
+
+    // Relacionamentos comuns em frequência (ajuste conforme os seus outros models)
     @ManyToOne
-    @JoinColumn(name = "aluno_matricula", nullable = false)
+    @JoinColumn(name = "aluno_id")
     private AlunoModel aluno;
 
     @ManyToOne
-    @JoinColumn(name = "id_disciplina", nullable = false)
+    @JoinColumn(name = "disciplina_id")
     private DisciplinaModel disciplina;
-
-    public FrequenciaModel() {
-    }
-
-    // Getters e Setters
-    public Integer getId_frequencia() {
-        return id_frequencia;
-    }
-
-    public void setId_frequencia(Integer id_frequencia) {
-        this.id_frequencia = id_frequencia;
-    }
-
-    public LocalDate getData() {
-        return data;
-    }
-
-    public void setData(LocalDate data) {
-        this.data = data;
-    }
-
-    public Boolean getPresenca() {
-        return presenca;
-    }
-
-    public void setPresenca(Boolean presenca) {
-        this.presenca = presenca;
-    }
-
-    public AlunoModel getAluno() {
-        return aluno;
-    }
-
-    public void setAluno(AlunoModel aluno) {
-        this.aluno = aluno;
-    }
-
-    public DisciplinaModel getDisciplina() {
-        return disciplina;
-    }
-
-    public void setDisciplina(DisciplinaModel disciplina) {
-        this.disciplina = disciplina;
-    }
 }

@@ -1,8 +1,7 @@
 package com.App_Escola.Api.Model;
 
+import java.time.LocalDate;
 
-import jakarta.persistence.Column;
-import jakarta.annotation.Generated;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,22 +11,20 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
-@Table(name = "aluno")
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
+@Entity
+@Table(name = "alunos")
 public class AlunoModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "matricula")
-    private Integer matricula;
+    private Integer id; // Funciona como a matrícula chamada no buscarPorMatricula(id)
 
     private String nome;
-    private String cpf;
-    private String telefone;
 
-    @Column(name = "id_turma", nullable = false)
-    private Integer turmaId;
+    private String email;
+
+    private LocalDate dataNascimento;
 }
