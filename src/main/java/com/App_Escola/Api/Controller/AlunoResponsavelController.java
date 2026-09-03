@@ -2,58 +2,45 @@ package com.App_Escola.Api.Controller;
 
 import com.App_Escola.Api.Model.AlunoResponsavelModel;
 import com.App_Escola.Api.Service.AlunoResponsavelService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
-@RequestMapping("/aluno-responsavel")
+@RequestMapping("/alunos-responsaveis")
 @CrossOrigin(origins = "*")
 public class AlunoResponsavelController {
 
-    @Autowired
-    private AlunoResponsavelService service;
+    private final AlunoResponsavelService service;
 
-    @GetMapping("/listar")
-    public List<AlunoResponsavelModel> listar() {
-        return service.listar();
+    public AlunoResponsavelController(AlunoResponsavelService service) {
+        this.service = service;
+    }
+
+    @GetMapping
+    public ResponseEntity<List<AlunoResponsavelModel>> listar() {
+        return ResponseEntity.ok(service.listarTodos());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AlunoResponsavelModel> buscarPorId(@PathVariable Integer id) {
-        Optional<AlunoResponsavelModel> alunoResponsavel = service.buscarPorId(id);
-        
-        if (alunoResponsavel.isPresent()) {
-            return ResponseEntity.ok(alunoResponsavel.get());
-        }
-        return ResponseEntity.notFound().build();
+    public ResponseEntity<AlunoResponsavelModel> buscar(@PathVariable Integer id) {
+        return ResponseEntity.ok(service.buscarPorId(id));
     }
 
-    @PostMapping("/cadastrar")
-    public AlunoResponsavelModel cadastrar(@RequestBody AlunoResponsavelModel alunoResponsavel) {
-        return service.salvar(alunoResponsavel);
-    }
+    @PostMapping
+    public ResponseEntity<AlunoResponsavelModel> cadastrar(
+            @RequestBody AlunoResponsavelModel relacionamento) {
 
-    @PutMapping("/{id}")
-    public ResponseEntity<AlunoResponsavelModel> updateAlunoResponsavel(@PathVariable Integer id, @RequestBody AlunoResponsavelModel dados) {
-        AlunoResponsavelModel alunoResponsavelAtualizado = service.atualizar(id, dados);
-
-        if (alunoResponsavelAtualizado != null) {
-            return ResponseEntity.ok(alunoResponsavelAtualizado);
-        }
-
-        return ResponseEntity.notFound().build();
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(service.salvar(relacionamento));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteAlunoResponsavel(@PathVariable Integer id) {
-        boolean deletado = service.deletar(id);
-        if (!deletado) {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<Void> excluir(@PathVariable Integer id) {
+        service.deletar(id);
         return ResponseEntity.noContent().build();
     }
 }
