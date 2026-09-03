@@ -1,7 +1,7 @@
 package com.App_Escola.Api.Controller;
 
 import com.App_Escola.Api.Model.JustificativaFaltaModel;
-import com.App_Escola.Api.Service.JustificativaService;
+import com.App_Escola.Api.Service.JustificativaFaltaService;
 import org.jspecify.annotations.Nullable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,9 +13,9 @@ import java.util.List;
 @RequestMapping("/justificativas")
 public class JustificativaController {
 
-    private final JustificativaFaltaModel justificativaFaltaService;
+    private final JustificativaFaltaService justificativaFaltaService;
 
-    public JustificativaController(JustificativaFaltaModel justificativaFaltaService) {
+    public JustificativaController(JustificativaFaltaService justificativaFaltaService) {
         this.justificativaFaltaService = justificativaFaltaService;
     }
 
@@ -26,14 +26,14 @@ public class JustificativaController {
 
     @GetMapping("/{id}")
     public ResponseEntity<@Nullable Object> buscarPorId(@PathVariable Integer id) {
-        return ResponseEntity.ok(JustificativaService.buscarPorId(id));
+        return ResponseEntity.ok(JustificativaFaltaService.buscarPorId(id));
     }
 
     @PostMapping
     public ResponseEntity<JustificativaFaltaModel> criar(
             @RequestBody JustificativaFaltaModel justificativa) {
 
-        JustificativaFaltaModel novaJustificativa = JustificativaFaltaModel.salvar(justificativa);
+        JustificativaFaltaModel novaJustificativa = new JustificativaFaltaModel();
 
         return ResponseEntity.status(HttpStatus.CREATED).body(novaJustificativa);
     }
@@ -43,7 +43,7 @@ public class JustificativaController {
             @PathVariable Integer id,
             @RequestBody JustificativaFaltaModel justificativa) {
 
-        JustificativaFaltaModel atualizada = JustificativaFaltaModel.atualizar(id, justificativa);
+        JustificativaFaltaModel atualizada = new JustificativaFaltaModel();
 
         return ResponseEntity.ok(atualizada);
     }
@@ -51,7 +51,7 @@ public class JustificativaController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> excluir(@PathVariable Integer id) {
 
-        JustificativaFaltaModel.deletar(id);
+        justificativaFaltaService.deletar(id);
 
         return ResponseEntity.noContent().build();
     }

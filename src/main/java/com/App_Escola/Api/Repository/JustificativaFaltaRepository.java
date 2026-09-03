@@ -5,5 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface JustificativaRepository extends JpaRepository<JustificativaFaltaModel, Integer> {
+public interface JustificativaFaltaRepository
+        extends JpaRepository<JustificativaFaltaModel, Integer> {
 }

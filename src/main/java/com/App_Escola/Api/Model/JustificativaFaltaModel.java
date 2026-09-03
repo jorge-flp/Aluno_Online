@@ -1,5 +1,7 @@
 package com.App_Escola.Api.Model;
 
+import java.util.List;
+
 import org.jspecify.annotations.Nullable;
 
 public class JustificativaFaltaModel {
@@ -27,6 +29,16 @@ public class JustificativaFaltaModel {
     public static @Nullable Object listarTodas() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'listarTodas'");
+    }
+
+    public List<JustificativaFaltaModel> findAll() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'findAll'");
+    }
+
+    public Object findById(Integer id) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'findById'");
     }
 
 }
