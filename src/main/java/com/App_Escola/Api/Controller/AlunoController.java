@@ -1,23 +1,15 @@
 package com.App_Escola.Api.Controller;
 
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.App_Escola.Api.Model.AlunoModel;
 import com.App_Escola.Api.Service.AlunoService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
-@RequestMapping("/aluno")
+@RequestMapping("/alunos")
 @CrossOrigin(origins = "*")
 public class AlunoController {
 
@@ -27,35 +19,35 @@ public class AlunoController {
         this.alunoService = alunoService;
     }
 
-    @GetMapping("/listar")
-    public List<AlunoModel> listar() {
-        return alunoService.listarTodos();
+    @GetMapping
+    public ResponseEntity<List<AlunoModel>> listar() {
+        return ResponseEntity.ok(alunoService.listarTodos());
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<AlunoModel> buscarPorID(@PathVariable Integer id) {
+    @GetMapping("/{matricula}")
+    public ResponseEntity<AlunoModel> buscarPorMatricula(
+            @PathVariable Integer matricula) {
 
-        Optional<AlunoModel> aluno = alunoService.buscarPorMatricula(id);
-
-        if (aluno.isPresent()) {
-            return ResponseEntity.ok(aluno.get());
-        }
-
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(
+                alunoService.buscarPorMatricula(matricula));
     }
 
-    @PostMapping("/cadastrar")
-    public ResponseEntity<AlunoModel> cadastrar(@RequestBody AlunoModel aluno) {
+    @PostMapping
+    public ResponseEntity<AlunoModel> cadastrar(
+            @RequestBody AlunoModel aluno) {
 
         AlunoModel alunoSalvo = alunoService.salvar(aluno);
 
-        return ResponseEntity.ok(alunoSalvo);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(alunoSalvo);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> excluir(@PathVariable Integer id) {
+    @DeleteMapping("/{matricula}")
+    public ResponseEntity<Void> excluir(
+            @PathVariable Integer matricula) {
 
-        alunoService.deletar(id);
+        alunoService.deletar(matricula);
 
         return ResponseEntity.noContent().build();
     }
