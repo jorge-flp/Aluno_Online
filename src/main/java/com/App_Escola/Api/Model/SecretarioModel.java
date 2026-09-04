@@ -1,18 +1,16 @@
 package com.App_Escola.Api.Model;
 
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.springframework.stereotype.Service;
+import lombok.NoArgsConstructor;
 
 @Data
-@Service
+@NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "Secretario")
+@Table(name = "secretario")
 public class SecretarioModel {
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,5 +24,4 @@ public class SecretarioModel {
 
     @Column(length = 20)
     private String telefone;
-
 }

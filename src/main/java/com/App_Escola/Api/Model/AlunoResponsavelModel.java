@@ -9,9 +9,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "aluno_responsavel", uniqueConstraints = {
-        @UniqueConstraint(columnNames = { "aluno_matricula", "responsavel_id" })
-})
+@Table(
+        name = "aluno_responsavel",
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        columnNames = {"aluno_matricula", "responsavel_id"}
+                )
+        }
+)
 public class AlunoResponsavelModel {
 
     @Id
@@ -19,10 +24,18 @@ public class AlunoResponsavelModel {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "aluno_matricula", nullable = false)
+    @JoinColumn(
+            name = "aluno_matricula",
+            referencedColumnName = "matricula",
+            nullable = false
+    )
     private AlunoModel aluno;
 
     @ManyToOne
-    @JoinColumn(name = "responsavel_id", nullable = false)
+    @JoinColumn(
+            name = "responsavel_id",
+            referencedColumnName = "id_responsavel",
+            nullable = false
+    )
     private ResponsavelModel responsavel;
 }
