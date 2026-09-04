@@ -2,9 +2,9 @@ package com.App_Escola.Api.Service;
 
 import com.App_Escola.Api.Model.AlunoModel;
 import com.App_Escola.Api.Repository.AlunoRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class AlunoService {
@@ -15,13 +15,14 @@ public class AlunoService {
         this.alunoRepository = alunoRepository;
     }
 
-    public List<AlunoModel> listarTodos() {
-        return alunoRepository.findAll();
+    public Page<AlunoModel> listarTodos(Pageable pageable) {
+        return alunoRepository.findAll(pageable);
     }
 
     public AlunoModel buscarPorMatricula(Integer matricula) {
         return alunoRepository.findById(matricula)
-                .orElseThrow(() -> new RuntimeException("Aluno não encontrado"));
+                .orElseThrow(() ->
+                        new RuntimeException("Aluno não encontrado"));
     }
 
     public AlunoModel salvar(AlunoModel aluno) {

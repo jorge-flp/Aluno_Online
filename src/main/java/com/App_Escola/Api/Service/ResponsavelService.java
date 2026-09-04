@@ -2,9 +2,9 @@ package com.App_Escola.Api.Service;
 
 import com.App_Escola.Api.Model.ResponsavelModel;
 import com.App_Escola.Api.Repository.ResponsavelRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class ResponsavelService {
@@ -15,8 +15,8 @@ public class ResponsavelService {
         this.repository = repository;
     }
 
-    public List<ResponsavelModel> listarTodos() {
-        return repository.findAll();
+    public Page<ResponsavelModel> listarTodos(Pageable pageable) {
+        return repository.findAll(pageable);
     }
 
     public ResponsavelModel buscarPorId(Integer id) {

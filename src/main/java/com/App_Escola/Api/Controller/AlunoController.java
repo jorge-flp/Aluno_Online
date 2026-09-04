@@ -2,11 +2,12 @@ package com.App_Escola.Api.Controller;
 
 import com.App_Escola.Api.Model.AlunoModel;
 import com.App_Escola.Api.Service.AlunoService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/alunos")
@@ -20,8 +21,12 @@ public class AlunoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<AlunoModel>> listar() {
-        return ResponseEntity.ok(alunoService.listarTodos());
+    public ResponseEntity<Page<AlunoModel>> listar(
+            @PageableDefault(size = 10) Pageable pageable) {
+
+        return ResponseEntity.ok(
+                alunoService.listarTodos(pageable)
+        );
     }
 
     @GetMapping("/{matricula}")
@@ -29,7 +34,8 @@ public class AlunoController {
             @PathVariable Integer matricula) {
 
         return ResponseEntity.ok(
-                alunoService.buscarPorMatricula(matricula));
+                alunoService.buscarPorMatricula(matricula)
+        );
     }
 
     @PostMapping
