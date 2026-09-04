@@ -25,7 +25,9 @@ public class AlunoResponsavelController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AlunoResponsavelModel> buscar(@PathVariable Integer id) {
+    public ResponseEntity<AlunoResponsavelModel> buscar(
+            @PathVariable Integer id) {
+
         return ResponseEntity.ok(service.buscarPorId(id));
     }
 
@@ -38,9 +40,22 @@ public class AlunoResponsavelController {
                 .body(service.salvar(relacionamento));
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<AlunoResponsavelModel> atualizar(
+            @PathVariable Integer id,
+            @RequestBody AlunoResponsavelModel relacionamento) {
+
+        return ResponseEntity.ok(
+                service.atualizar(id, relacionamento)
+        );
+    }
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> excluir(@PathVariable Integer id) {
+    public ResponseEntity<Void> excluir(
+            @PathVariable Integer id) {
+
         service.deletar(id);
+
         return ResponseEntity.noContent().build();
     }
 }

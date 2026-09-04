@@ -21,7 +21,11 @@ public class AlunoResponsavelModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @Column(name = "id_aluno_responsavel")
+    private Integer idAlunoResponsavel;
+
+    @Column(name = "parentesco", length = 50)
+    private String parentesco;
 
     @ManyToOne
     @JoinColumn(
