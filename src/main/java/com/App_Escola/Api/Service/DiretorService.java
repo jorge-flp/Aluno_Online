@@ -1,11 +1,10 @@
 package com.App_Escola.Api.Service;
 
-import java.util.List;
-
-import org.springframework.stereotype.Service;
-
 import com.App_Escola.Api.Model.DiretorModel;
 import com.App_Escola.Api.Repository.DiretorRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
 @Service
 public class DiretorService {
@@ -16,8 +15,8 @@ public class DiretorService {
         this.repository = repository;
     }
 
-    public List<DiretorModel> listarTodos() {
-        return repository.findAll();
+    public Page<DiretorModel> listarTodos(Pageable pageable) {
+        return repository.findAll(pageable);
     }
 
     public DiretorModel buscarPorId(Integer id) {
@@ -37,7 +36,6 @@ public class DiretorService {
         diretorExistente.setTelefone(diretorAtualizado.getTelefone());
 
         return repository.save(diretorExistente);
-
     }
 
     public void deletar(Integer id) {
@@ -47,5 +45,4 @@ public class DiretorService {
 
         repository.deleteById(id);
     }
-
 }

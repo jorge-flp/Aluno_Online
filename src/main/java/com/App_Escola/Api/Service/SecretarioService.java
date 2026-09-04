@@ -2,9 +2,9 @@ package com.App_Escola.Api.Service;
 
 import com.App_Escola.Api.Model.SecretarioModel;
 import com.App_Escola.Api.Repository.SecretarioRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class SecretarioService {
@@ -15,8 +15,8 @@ public class SecretarioService {
         this.repository = repository;
     }
 
-    public List<SecretarioModel> listarTodos() {
-        return repository.findAll();
+    public Page<SecretarioModel> listarTodos(Pageable pageable) {
+        return repository.findAll(pageable);
     }
 
     public SecretarioModel buscarPorId(Integer id) {

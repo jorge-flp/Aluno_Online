@@ -2,11 +2,12 @@ package com.App_Escola.Api.Controller;
 
 import com.App_Escola.Api.Model.SecretarioModel;
 import com.App_Escola.Api.Service.SecretarioService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/secretarios")
@@ -20,8 +21,12 @@ public class SecretarioController {
     }
 
     @GetMapping
-    public ResponseEntity<List<SecretarioModel>> listar() {
-        return ResponseEntity.ok(service.listarTodos());
+    public ResponseEntity<Page<SecretarioModel>> listar(
+            @PageableDefault(size = 10) Pageable pageable) {
+
+        return ResponseEntity.ok(
+                service.listarTodos(pageable)
+        );
     }
 
     @GetMapping("/{id}")
