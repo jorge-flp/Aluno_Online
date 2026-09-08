@@ -1,4 +1,4 @@
-package com.App_Escola.Api.exception;
+package com.App_Escola.Api.Exception;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
