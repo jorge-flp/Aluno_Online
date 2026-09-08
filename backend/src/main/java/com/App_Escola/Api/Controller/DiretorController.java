@@ -1,7 +1,7 @@
 package com.App_Escola.Api.Controller;
 
-import com.App_Escola.Api.Model.ResponsavelModel;
-import com.App_Escola.Api.Service.ResponsavelService;
+import com.App_Escola.Api.Model.DiretorModel;
+import com.App_Escola.Api.Service.DiretorService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -10,18 +10,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/responsaveis")
+@RequestMapping("/diretores")
 @CrossOrigin(origins = "*")
-public class ResponsavelController {
+public class DiretorController {
 
-    private final ResponsavelService service;
+    private final DiretorService service;
 
-    public ResponsavelController(ResponsavelService service) {
+    public DiretorController(DiretorService service) {
         this.service = service;
     }
 
     @GetMapping
-    public ResponseEntity<Page<ResponsavelModel>> listar(
+    public ResponseEntity<Page<DiretorModel>> listar(
             @PageableDefault(size = 10) Pageable pageable) {
 
         return ResponseEntity.ok(
@@ -30,37 +30,30 @@ public class ResponsavelController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ResponsavelModel> buscar(
-            @PathVariable Integer id) {
-
+    public ResponseEntity<DiretorModel> buscar(@PathVariable Integer id) {
         return ResponseEntity.ok(service.buscarPorId(id));
     }
 
     @PostMapping
-    public ResponseEntity<ResponsavelModel> cadastrar(
-            @RequestBody ResponsavelModel responsavel) {
+    public ResponseEntity<DiretorModel> cadastrar(
+            @RequestBody DiretorModel diretor) {
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(service.salvar(responsavel));
+                .body(service.salvar(diretor));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ResponsavelModel> atualizar(
+    public ResponseEntity<DiretorModel> atualizar(
             @PathVariable Integer id,
-            @RequestBody ResponsavelModel responsavel) {
+            @RequestBody DiretorModel diretor) {
 
-        return ResponseEntity.ok(
-                service.atualizar(id, responsavel)
-        );
+        return ResponseEntity.ok(service.atualizar(id, diretor));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> excluir(
-            @PathVariable Integer id) {
-
+    public ResponseEntity<Void> excluir(@PathVariable Integer id) {
         service.deletar(id);
-
         return ResponseEntity.noContent().build();
     }
 }

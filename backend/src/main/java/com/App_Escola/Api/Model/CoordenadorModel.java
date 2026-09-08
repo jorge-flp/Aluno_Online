@@ -1,5 +1,6 @@
 package com.App_Escola.Api.Model;
 
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,21 +10,16 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "responsavel")
-public class ResponsavelModel {
-
+@Table(name = "coordenador")
+public class CoordenadorModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_responsavel")
-    private Integer idResponsavel;
+    private Long id;
 
     @Column(nullable = false, length = 100)
     private String nome;
 
-    @Column(unique = true, length = 14)
-    private String cpf;
-
-    @Column(length = 150)
+    @Column(nullable = false, length = 100)
     private String email;
 
     @Column(length = 20)

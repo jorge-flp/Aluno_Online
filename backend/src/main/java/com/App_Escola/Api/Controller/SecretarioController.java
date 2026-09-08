@@ -1,7 +1,7 @@
 package com.App_Escola.Api.Controller;
 
-import com.App_Escola.Api.Model.ResponsavelModel;
-import com.App_Escola.Api.Service.ResponsavelService;
+import com.App_Escola.Api.Model.SecretarioModel;
+import com.App_Escola.Api.Service.SecretarioService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -10,18 +10,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/responsaveis")
+@RequestMapping("/secretarios")
 @CrossOrigin(origins = "*")
-public class ResponsavelController {
+public class SecretarioController {
 
-    private final ResponsavelService service;
+    private final SecretarioService service;
 
-    public ResponsavelController(ResponsavelService service) {
+    public SecretarioController(SecretarioService service) {
         this.service = service;
     }
 
     @GetMapping
-    public ResponseEntity<Page<ResponsavelModel>> listar(
+    public ResponseEntity<Page<SecretarioModel>> listar(
             @PageableDefault(size = 10) Pageable pageable) {
 
         return ResponseEntity.ok(
@@ -30,37 +30,30 @@ public class ResponsavelController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ResponsavelModel> buscar(
-            @PathVariable Integer id) {
-
+    public ResponseEntity<SecretarioModel> buscar(@PathVariable Integer id) {
         return ResponseEntity.ok(service.buscarPorId(id));
     }
 
     @PostMapping
-    public ResponseEntity<ResponsavelModel> cadastrar(
-            @RequestBody ResponsavelModel responsavel) {
+    public ResponseEntity<SecretarioModel> cadastrar(
+            @RequestBody SecretarioModel secretario) {
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(service.salvar(responsavel));
+                .body(service.salvar(secretario));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ResponsavelModel> atualizar(
+    public ResponseEntity<SecretarioModel> atualizar(
             @PathVariable Integer id,
-            @RequestBody ResponsavelModel responsavel) {
+            @RequestBody SecretarioModel secretario) {
 
-        return ResponseEntity.ok(
-                service.atualizar(id, responsavel)
-        );
+        return ResponseEntity.ok(service.atualizar(id, secretario));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> excluir(
-            @PathVariable Integer id) {
-
+    public ResponseEntity<Void> excluir(@PathVariable Integer id) {
         service.deletar(id);
-
         return ResponseEntity.noContent().build();
     }
 }

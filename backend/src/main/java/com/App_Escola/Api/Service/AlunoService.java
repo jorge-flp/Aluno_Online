@@ -1,45 +1,39 @@
 package com.App_Escola.Api.Service;
 
-import java.util.List;
-import java.util.Optional;
-
+import com.App_Escola.Api.Model.AlunoModel;
+import com.App_Escola.Api.Repository.AlunoRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.App_Escola.Api.Model.AlunoModel;
-import com.App_Escola.Api.Model.TurmaModel;
-import com.App_Escola.Api.Repository.AlunoRepository;
-import com.App_Escola.Api.Repository.TurmaRepository;
-
-import lombok.AllArgsConstructor;
-
 @Service
-@AllArgsConstructor
 public class AlunoService {
 
     private final AlunoRepository alunoRepository;
-    private final TurmaRepository turmaRepository;
 
-    public List<AlunoModel> listarTodos() {
-        return alunoRepository.findAll();
+    public AlunoService(AlunoRepository alunoRepository) {
+        this.alunoRepository = alunoRepository;
     }
 
-    public Optional<AlunoModel> buscarPorMatricula(Integer matricula) {
-        return alunoRepository.findById(matricula);
+    public Page<AlunoModel> listarTodos(Pageable pageable) {
+        return alunoRepository.findAll(pageable);
+    }
+
+    public AlunoModel buscarPorMatricula(Integer matricula) {
+        return alunoRepository.findById(matricula)
+                .orElseThrow(() ->
+                        new RuntimeException("Aluno não encontrado"));
     }
 
     public AlunoModel salvar(AlunoModel aluno) {
-
-        if (aluno.getTurmaId() == null) {
-            throw new RuntimeException("O ID da turma é obrigatório");
-        }
-
-        turmaRepository.findById(aluno.getTurmaId())
-                .orElseThrow(() -> new RuntimeException("Turma não encontrada"));
-
         return alunoRepository.save(aluno);
     }
 
     public void deletar(Integer matricula) {
+        if (!alunoRepository.existsById(matricula)) {
+            throw new RuntimeException("Aluno não encontrado");
+        }
+
         alunoRepository.deleteById(matricula);
     }
 }

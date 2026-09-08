@@ -9,21 +9,17 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "responsavel")
-public class ResponsavelModel {
+@Table(name = "diretor")
+public class DiretorModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_responsavel")
-    private Integer idResponsavel;
+    private Integer id;
 
     @Column(nullable = false, length = 100)
     private String nome;
 
-    @Column(unique = true, length = 14)
-    private String cpf;
-
-    @Column(length = 150)
+    @Column(unique = true, length = 150)
     private String email;
 
     @Column(length = 20)
