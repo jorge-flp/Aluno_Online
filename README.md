@@ -515,4 +515,8 @@ A prioridade atual é garantir que a conexão com os serviços em nuvem esteja c
 
 ## 18. Autor / Equipe
 
+Desevolvido por:
+- Jorge
+- Heitor
+
 Projeto desenvolvido como aplicação acadêmica e colaborativa para gerenciamento escolar.
