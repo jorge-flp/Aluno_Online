@@ -7,13 +7,15 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class BoletimModel {
+public class BoletimConceitoModel {
 
     private Integer matricula;
+
     private String nome;
-    private String turma;
+
     private Double mediaGeral;
-    private Double frequencia;
-    private String situacao;
+
+    private String conceito;
+
     private String feedback;
-} 
+}

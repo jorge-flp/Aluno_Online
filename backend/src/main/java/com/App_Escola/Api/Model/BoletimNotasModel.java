@@ -4,16 +4,20 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class BoletimModel {
+public class BoletimNotasModel {
 
     private Integer matricula;
+
     private String nome;
+
     private String turma;
+
+    private List<DisciplinaBoletimModel> disciplinas;
+
     private Double mediaGeral;
-    private Double frequencia;
-    private String situacao;
-    private String feedback;
-} 
+}
