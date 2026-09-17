@@ -71,10 +71,10 @@
             <optional>true</optional>
         </dependency>
 
-        <!-- Testes -->
+        <!-- Testes: JUnit 5 + Mockito (spring-boot-starter-test já inclui ambos) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa-test</artifactId>
+            <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
 
