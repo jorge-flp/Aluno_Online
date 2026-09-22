@@ -1,4 +1,7 @@
-# Maven
+#Ignore
+backend/src/main/resources/application.properties
+
+# Maven      
 target/
 .mvn/wrapper/maven-wrapper.jar
 
