@@ -2,51 +2,55 @@ package com.App_Escola.Api.Service;
 
 import com.App_Escola.Api.Model.AlunoModel;
 import com.App_Escola.Api.Model.BoletimConceitoModel;
+import com.App_Escola.Api.Model.BoletimModel;
 import com.App_Escola.Api.Model.BoletimNotasModel;
 import com.App_Escola.Api.Model.DisciplinaBoletimModel;
 import com.App_Escola.Api.Model.NotaModel;
 
 import com.App_Escola.Api.Repository.AlunoRepository;
+import com.App_Escola.Api.Repository.BoletimRepository;
 import com.App_Escola.Api.Repository.NotaRepository;
 
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class BoletimService {
 
     private final AlunoRepository alunoRepository;
     private final NotaRepository notaRepository;
+    private final BoletimRepository boletimRepository;
 
     public BoletimService(
             AlunoRepository alunoRepository,
-            NotaRepository notaRepository
+            NotaRepository notaRepository,
+            BoletimRepository boletimRepository
     ) {
         this.alunoRepository = alunoRepository;
         this.notaRepository = notaRepository;
+        this.boletimRepository = boletimRepository;
     }
 
     // =========================================================
-    // BOLETIM DE NOTAS
+    // BOLETIM DETALHADO DE NOTAS
     // =========================================================
 
     public BoletimNotasModel buscarNotas(Integer matricula) {
 
-        // 1. Busca o aluno
         AlunoModel aluno = alunoRepository.findById(matricula)
                 .orElseThrow(() ->
                         new RuntimeException("Aluno não encontrado")
                 );
 
-        // 2. Busca todas as notas desse aluno
         List<NotaModel> notas =
                 notaRepository.findByAluno_Matricula(matricula);
 
-        // 3. Agrupa as notas por disciplina
         Map<String, List<Double>> notasPorDisciplina =
                 new LinkedHashMap<>();
 
@@ -63,50 +67,58 @@ public class BoletimService {
                     .add(nota.getValor());
         }
 
-        // 4. Monta as disciplinas do boletim
         List<DisciplinaBoletimModel> disciplinas =
                 new ArrayList<>();
 
         for (Map.Entry<String, List<Double>> entry
                 : notasPorDisciplina.entrySet()) {
 
-            String nomeDisciplina = entry.getKey();
+            String nomeDisciplina =
+                    entry.getKey();
 
-            List<Double> valores = entry.getValue();
+            List<Double> valores =
+                    entry.getValue();
 
-            double mediaDisciplina = valores.stream()
-                    .mapToDouble(Double::doubleValue)
-                    .average()
-                    .orElse(0.0);
+            double mediaDisciplina =
+                    valores.stream()
+                            .mapToDouble(Double::doubleValue)
+                            .average()
+                            .orElse(0.0);
 
-            DisciplinaBoletimModel disciplinaBoletim =
+            DisciplinaBoletimModel disciplina =
                     new DisciplinaBoletimModel();
 
-            disciplinaBoletim.setDisciplina(nomeDisciplina);
-            disciplinaBoletim.setNotas(valores);
-            disciplinaBoletim.setMedia(
+            disciplina.setDisciplina(
+                    nomeDisciplina
+            );
+
+            disciplina.setNotas(
+                    valores
+            );
+
+            disciplina.setMedia(
                     arredondar(mediaDisciplina)
             );
 
-            disciplinas.add(disciplinaBoletim);
+            disciplinas.add(
+                    disciplina
+            );
         }
 
-        // 5. Calcula a média geral
-        double mediaGeral = disciplinas.stream()
-                .mapToDouble(
-                        DisciplinaBoletimModel::getMedia
-                )
-                .average()
-                .orElse(0.0);
+        double mediaGeral =
+                disciplinas.stream()
+                        .mapToDouble(
+                                DisciplinaBoletimModel::getMedia
+                        )
+                        .average()
+                        .orElse(0.0);
 
-        // 6. Descobre a turma do aluno
         String turma = null;
 
         if (aluno.getTurma() != null) {
             turma = aluno.getTurma().getNome();
         }
 
-        // 7. Monta o boletim
         BoletimNotasModel boletim =
                 new BoletimNotasModel();
 
@@ -144,55 +156,183 @@ public class BoletimService {
         BoletimNotasModel boletimNotas =
                 buscarNotas(matricula);
 
-        BoletimConceitoModel conceitoModel =
+        BoletimConceitoModel conceito =
                 new BoletimConceitoModel();
 
-        conceitoModel.setMatricula(
+        conceito.setMatricula(
                 boletimNotas.getMatricula()
         );
 
-        conceitoModel.setNome(
+        conceito.setNome(
                 boletimNotas.getNome()
         );
 
-        conceitoModel.setMediaGeral(
+        conceito.setMediaGeral(
                 boletimNotas.getMediaGeral()
         );
 
-        // Aluno ainda sem notas
         if (boletimNotas.getDisciplinas() == null ||
                 boletimNotas.getDisciplinas().isEmpty()) {
 
-            conceitoModel.setConceito(
+            conceito.setConceito(
                     "SEM AVALIAÇÃO"
             );
 
-            conceitoModel.setFeedback(
+            conceito.setFeedback(
                     "O aluno ainda não possui notas cadastradas."
             );
 
-            return conceitoModel;
+            return conceito;
         }
 
-        String conceito =
+        String valorConceito =
                 calcularConceito(
                         boletimNotas.getMediaGeral()
                 );
 
-        conceitoModel.setConceito(conceito);
-
-        conceitoModel.setFeedback(
-                gerarFeedback(conceito)
+        conceito.setConceito(
+                valorConceito
         );
 
-        return conceitoModel;
+        conceito.setFeedback(
+                gerarFeedback(valorConceito)
+        );
+
+        return conceito;
     }
 
     // =========================================================
-    // CÁLCULO DO CONCEITO
+    // GERA E SALVA BOLETIM NO AIVEN
     // =========================================================
 
-    private String calcularConceito(double media) {
+    public BoletimModel gerarBoletim(
+            Integer matricula,
+            Integer anoLetivo
+    ) {
+
+        AlunoModel aluno =
+                alunoRepository.findById(matricula)
+                        .orElseThrow(() ->
+                                new RuntimeException(
+                                        "Aluno não encontrado"
+                                )
+                        );
+
+        BoletimConceitoModel conceito =
+                buscarConceito(matricula);
+
+        Optional<BoletimModel> boletimExistente =
+                boletimRepository
+                        .findByAluno_MatriculaAndAnoLetivo(
+                                matricula,
+                                anoLetivo
+                        );
+
+        BoletimModel boletim =
+                boletimExistente
+                        .orElse(
+                                new BoletimModel()
+                        );
+
+        boletim.setAluno(
+                aluno
+        );
+
+        boletim.setAnoLetivo(
+                anoLetivo
+        );
+
+        boletim.setMediaGeral(
+                conceito.getMediaGeral()
+        );
+
+        boletim.setConceito(
+                conceito.getConceito()
+        );
+
+        boletim.setFeedback(
+                conceito.getFeedback()
+        );
+
+        boletim.setDataGeracao(
+                LocalDate.now()
+        );
+
+        return boletimRepository.save(
+                boletim
+        );
+    }
+
+    // =========================================================
+    // LISTA BOLETINS DO ALUNO
+    // =========================================================
+
+    public List<BoletimModel> listarBoletinsDoAluno(
+            Integer matricula
+    ) {
+
+        if (!alunoRepository.existsById(matricula)) {
+
+            throw new RuntimeException(
+                    "Aluno não encontrado"
+            );
+        }
+
+        return boletimRepository
+                .findByAluno_Matricula(
+                        matricula
+                );
+    }
+
+    // =========================================================
+    // BUSCA BOLETIM POR ANO
+    // =========================================================
+
+    public BoletimModel buscarBoletim(
+            Integer matricula,
+            Integer anoLetivo
+    ) {
+
+        return boletimRepository
+                .findByAluno_MatriculaAndAnoLetivo(
+                        matricula,
+                        anoLetivo
+                )
+                .orElseThrow(() ->
+                        new RuntimeException(
+                                "Boletim não encontrado"
+                        )
+                );
+    }
+
+    // =========================================================
+    // DELETA BOLETIM
+    // =========================================================
+
+    public void deletarBoletim(
+            Integer idBoletim
+    ) {
+
+        BoletimModel boletim =
+                boletimRepository.findById(idBoletim)
+                        .orElseThrow(() ->
+                                new RuntimeException(
+                                        "Boletim não encontrado"
+                                )
+                        );
+
+        boletimRepository.delete(
+                boletim
+        );
+    }
+
+    // =========================================================
+    // CONCEITO
+    // =========================================================
+
+    private String calcularConceito(
+            double media
+    ) {
 
         if (media >= 9.0) {
             return "A";
@@ -213,7 +353,9 @@ public class BoletimService {
     // FEEDBACK
     // =========================================================
 
-    private String gerarFeedback(String conceito) {
+    private String gerarFeedback(
+            String conceito
+    ) {
 
         return switch (conceito) {
 
@@ -238,7 +380,12 @@ public class BoletimService {
     // ARREDONDAMENTO
     // =========================================================
 
-    private double arredondar(double valor) {
-        return Math.round(valor * 100.0) / 100.0;
+    private double arredondar(
+            double valor
+    ) {
+
+        return Math.round(
+                valor * 100.0
+        ) / 100.0;
     }
 }
