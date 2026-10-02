@@ -1,37 +1,25 @@
 package com.App_Escola.Api.Config;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
-import java.util.List;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-public class CorsConfig {
+public class CorsConfig implements WebMvcConfigurer {
 
-    @Value("${app.frontend.url}")
+    @Value("${app.frontend.url:http://localhost:5173}")
     private String frontendUrl;
 
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
 
-        CorsConfiguration configuration =
-                new CorsConfiguration();
-
-        // Frontend publicado + frontend local
-        configuration.setAllowedOrigins(
-                List.of(
+        registry.addMapping("/**")
+                .allowedOrigins(
                         frontendUrl,
                         "http://localhost:5173"
                 )
-        );
-
-        // Métodos permitidos
-        configuration.setAllowedMethods(
-                List.of(
+                .allowedMethods(
                         "GET",
                         "POST",
                         "PUT",
@@ -39,27 +27,8 @@ public class CorsConfig {
                         "DELETE",
                         "OPTIONS"
                 )
-        );
-
-        // Headers permitidos
-        configuration.setAllowedHeaders(
-                List.of("*")
-        );
-
-        // Permite cookies/autenticação futuramente
-        configuration.setAllowCredentials(true);
-
-        // Tempo de cache da configuração CORS
-        configuration.setMaxAge(3600L);
-
-        UrlBasedCorsConfigurationSource source =
-                new UrlBasedCorsConfigurationSource();
-
-        source.registerCorsConfiguration(
-                "/**",
-                configuration
-        );
-
-        return source;
+                .allowedHeaders("*")
+                .allowCredentials(true)
+                .maxAge(3600);
     }
 }
