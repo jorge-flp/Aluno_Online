@@ -1,0 +1,65 @@
+package com.App_Escola.Api.Config;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
+
+@Configuration
+public class CorsConfig {
+
+    @Value("${app.frontend.url}")
+    private String frontendUrl;
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+
+        CorsConfiguration configuration =
+                new CorsConfiguration();
+
+        // Frontend publicado + frontend local
+        configuration.setAllowedOrigins(
+                List.of(
+                        frontendUrl,
+                        "http://localhost:5173"
+                )
+        );
+
+        // Métodos permitidos
+        configuration.setAllowedMethods(
+                List.of(
+                        "GET",
+                        "POST",
+                        "PUT",
+                        "PATCH",
+                        "DELETE",
+                        "OPTIONS"
+                )
+        );
+
+        // Headers permitidos
+        configuration.setAllowedHeaders(
+                List.of("*")
+        );
+
+        // Permite cookies/autenticação futuramente
+        configuration.setAllowCredentials(true);
+
+        // Tempo de cache da configuração CORS
+        configuration.setMaxAge(3600L);
+
+        UrlBasedCorsConfigurationSource source =
+                new UrlBasedCorsConfigurationSource();
+
+        source.registerCorsConfiguration(
+                "/**",
+                configuration
+        );
+
+        return source;
+    }
+}
