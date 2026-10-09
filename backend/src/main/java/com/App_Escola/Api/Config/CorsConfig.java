@@ -15,11 +15,14 @@ public class CorsConfig {
     @Value("${app.frontend.url:https://esconlinefront-school-portal.vercel.app}")
     private String frontendUrl;
 
+    @Value("${app.frontend.preview-origin-pattern:https://esconlinefront-school-portal-*.vercel.app}")
+    private String frontendPreviewOriginPattern;
+
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(
-                List.of(frontendUrl, "http://localhost:5173")
+        configuration.setAllowedOriginPatterns(
+            List.of(frontendUrl, frontendPreviewOriginPattern, "http://localhost:5173")
         );
         configuration.setAllowedMethods(
                 List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
