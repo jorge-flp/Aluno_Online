@@ -2,6 +2,7 @@ package com.App_Escola.Api.Controller;
 
 import com.App_Escola.Api.Model.NotaModel;
 import com.App_Escola.Api.Service.NotaService;
+import jakarta.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,7 +43,7 @@ public class NotaController {
 
     @PostMapping
     public ResponseEntity<NotaModel> cadastrar(
-            @RequestBody NotaModel nota
+            @Valid @RequestBody NotaModel nota
     ) {
 
         return ResponseEntity

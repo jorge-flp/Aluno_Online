@@ -21,6 +21,7 @@ public class NotaModel {
     private Integer idNota;
 
     @ManyToOne(optional = false)
+        @NotNull(message = "O aluno é obrigatório")
     @JoinColumn(
             name = "aluno_matricula",
             referencedColumnName = "matricula",
@@ -29,6 +30,7 @@ public class NotaModel {
     private AlunoModel aluno;
 
     @ManyToOne(optional = false)
+        @NotNull(message = "A disciplina é obrigatória")
     @JoinColumn(
             name = "disciplina_id",
             referencedColumnName = "id_disciplina",

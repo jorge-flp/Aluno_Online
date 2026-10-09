@@ -2,6 +2,7 @@ package com.App_Escola.Api.Controller;
 
 import com.App_Escola.Api.Model.AlunoResponsavelModel;
 import com.App_Escola.Api.Service.AlunoResponsavelService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +34,7 @@ public class AlunoResponsavelController {
 
     @PostMapping
     public ResponseEntity<AlunoResponsavelModel> cadastrar(
-            @RequestBody AlunoResponsavelModel relacionamento) {
+            @Valid @RequestBody AlunoResponsavelModel relacionamento) {
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -43,7 +44,7 @@ public class AlunoResponsavelController {
     @PutMapping("/{id}")
     public ResponseEntity<AlunoResponsavelModel> atualizar(
             @PathVariable Integer id,
-            @RequestBody AlunoResponsavelModel relacionamento) {
+            @Valid @RequestBody AlunoResponsavelModel relacionamento) {
 
         return ResponseEntity.ok(
                 service.atualizar(id, relacionamento)

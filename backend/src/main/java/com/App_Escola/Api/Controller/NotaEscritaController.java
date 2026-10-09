@@ -4,6 +4,7 @@ import com.App_Escola.Api.Model.NotaEscritaModel;
 import com.App_Escola.Api.Service.NotaEscritaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public class NotaEscritaController {
 
     @PostMapping
     public ResponseEntity<NotaEscritaModel> criar(
-            @RequestBody NotaEscritaModel nota) {
+            @Valid @RequestBody NotaEscritaModel nota) {
 
         return ResponseEntity.ok(service.criar(nota));
     }
@@ -54,7 +55,7 @@ public class NotaEscritaController {
     @PutMapping("/{id}")
     public ResponseEntity<NotaEscritaModel> atualizar(
             @PathVariable Long id,
-            @RequestBody NotaEscritaModel dados) {
+            @Valid @RequestBody NotaEscritaModel dados) {
 
         return service.atualizar(id, dados)
                 .map(ResponseEntity::ok)

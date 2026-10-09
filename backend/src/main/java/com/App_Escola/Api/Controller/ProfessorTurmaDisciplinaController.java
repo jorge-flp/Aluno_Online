@@ -2,6 +2,7 @@ package com.App_Escola.Api.Controller;
 
 import com.App_Escola.Api.Model.ProfessorTurmaDisciplinaModel;
 import com.App_Escola.Api.Service.ProfessorTurmaDisciplinaService;
+import jakarta.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,7 +45,7 @@ public class ProfessorTurmaDisciplinaController {
 
     @PostMapping
     public ResponseEntity<ProfessorTurmaDisciplinaModel> cadastrar(
-            @RequestBody ProfessorTurmaDisciplinaModel relacionamento
+            @Valid @RequestBody ProfessorTurmaDisciplinaModel relacionamento
     ) {
 
         return ResponseEntity
@@ -57,7 +58,7 @@ public class ProfessorTurmaDisciplinaController {
     @PutMapping("/{id}")
     public ResponseEntity<ProfessorTurmaDisciplinaModel> atualizar(
             @PathVariable Integer id,
-            @RequestBody ProfessorTurmaDisciplinaModel relacionamento
+            @Valid @RequestBody ProfessorTurmaDisciplinaModel relacionamento
     ) {
 
         return ResponseEntity.ok(

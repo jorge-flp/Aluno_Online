@@ -14,7 +14,13 @@ public class Atestado {
     private String nomeArquivo;
 
     @Column(name = "url_arquivo", length = 1000)
-    private String urlArquivo; // Guarda o link público gerado pelo Supabase
+    private String urlArquivo;
+
+    @Column(name = "matricula")
+    private Integer matricula;
+
+    @Column(name = "professor_id")
+    private Long professorId;
 
     public Atestado() {}
 
@@ -32,4 +38,10 @@ public class Atestado {
 
     public String getUrlArquivo() { return urlArquivo; }
     public void setUrlArquivo(String urlArquivo) { this.urlArquivo = urlArquivo; }
+
+    public Integer getMatricula() { return matricula; }
+    public void setMatricula(Integer matricula) { this.matricula = matricula; }
+
+    public Long getProfessorId() { return professorId; }
+    public void setProfessorId(Long professorId) { this.professorId = professorId; }
 }

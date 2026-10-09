@@ -2,6 +2,7 @@ package com.App_Escola.Api.Controller;
 
 import com.App_Escola.Api.Model.CoordenadorModel;
 import com.App_Escola.Api.Service.CoordenadorService;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -36,7 +37,7 @@ public class CoordenadorController {
 
     @PostMapping
     public ResponseEntity<CoordenadorModel> cadastrar(
-            @RequestBody CoordenadorModel coordenador) {
+            @Valid @RequestBody CoordenadorModel coordenador) {
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -46,7 +47,7 @@ public class CoordenadorController {
     @PutMapping("/{id}")
     public ResponseEntity<CoordenadorModel> atualizar(
             @PathVariable Integer id,
-            @RequestBody CoordenadorModel coordenador) {
+            @Valid @RequestBody CoordenadorModel coordenador) {
 
         return ResponseEntity.ok(service.atualizar(id, coordenador));
     }

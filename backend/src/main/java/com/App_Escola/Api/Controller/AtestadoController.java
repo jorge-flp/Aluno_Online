@@ -9,10 +9,20 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/Atestados")
 public class AtestadoController {
+
+    private static final Map<String, String> MIME_TYPES = Map.of(
+            ".pdf", "application/pdf",
+            ".jpg", "image/jpeg",
+            ".jpeg", "image/jpeg",
+            ".png", "image/png",
+            ".webp", "image/webp"
+    );
 
     @Autowired
     private AtestadoRepository atestadoRepository;
@@ -21,25 +31,41 @@ public class AtestadoController {
     private SupabaseStorageService supabaseStorageService;
 
     @PostMapping("/upload")
-    public ResponseEntity<String> upload(@RequestParam("arquivo") MultipartFile arquivo) {
+    public ResponseEntity<?> upload(
+            @RequestParam("arquivo") MultipartFile arquivo,
+            @RequestParam("matricula") Integer matricula,
+            @RequestParam(value = "professorId", required = false) Long professorId) {
         if (arquivo.isEmpty()) {
             return ResponseEntity.badRequest().body("Arquivo vazio.");
         }
+        if (matricula == null || matricula <= 0) {
+            return ResponseEntity.badRequest().body("Informe uma matrícula válida.");
+        }
 
         String nomeArquivo = arquivo.getOriginalFilename();
-        if (nomeArquivo == null || !nomeArquivo.toLowerCase().endsWith(".pdf")) {
-            return ResponseEntity.badRequest().body("Apenas arquivos PDF são permitidos.");
+        String nomeNormalizado = nomeArquivo == null ? "" : nomeArquivo.toLowerCase(Locale.ROOT);
+        String extensao = nomeNormalizado.lastIndexOf('.') >= 0
+                ? nomeNormalizado.substring(nomeNormalizado.lastIndexOf('.'))
+                : "";
+        String contentType = MIME_TYPES.get(extensao);
+        if (contentType == null) {
+            return ResponseEntity.badRequest().body("Envie um PDF, JPG, PNG ou WEBP.");
+        }
+        String contentTypeEnviado = arquivo.getContentType();
+        if (contentTypeEnviado != null
+                && !contentType.equalsIgnoreCase(contentTypeEnviado)
+                && !"application/octet-stream".equalsIgnoreCase(contentTypeEnviado)) {
+            return ResponseEntity.badRequest().body("O tipo do arquivo não corresponde à extensão.");
         }
 
         try {
-            // 1. Faz o upload para o Supabase Storage e pega a URL pública
-            String fileUrl = supabaseStorageService.uploadFile(arquivo);
+            String fileUrl = supabaseStorageService.uploadFile(arquivo, contentType);
 
-            // 2. Salva o registro (nome e link) no PostgreSQL da Aiven
             Atestado atestado = new Atestado(nomeArquivo, fileUrl);
-            atestadoRepository.save(atestado);
+            atestado.setMatricula(matricula);
+            atestado.setProfessorId(professorId);
 
-            return ResponseEntity.ok("Upload realizado com sucesso! Arquivo enviado ao Supabase e link salvo na Aiven.");
+            return ResponseEntity.ok(atestadoRepository.save(atestado));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -47,9 +73,19 @@ public class AtestadoController {
         }
     }
 
-    @GetMapping("/")
+    @GetMapping({"", "/"})
     public ResponseEntity<List<Atestado>> listarArquivos() {
         return ResponseEntity.ok(atestadoRepository.findAll());
+    }
+
+    @GetMapping("/aluno/{matricula}")
+    public ResponseEntity<List<Atestado>> listarPorAluno(@PathVariable Integer matricula) {
+        return ResponseEntity.ok(atestadoRepository.findByMatriculaOrderByIdDesc(matricula));
+    }
+
+    @GetMapping("/professor/{professorId}")
+    public ResponseEntity<List<Atestado>> listarPorProfessor(@PathVariable Long professorId) {
+        return ResponseEntity.ok(atestadoRepository.findByProfessorIdOrderByIdDesc(professorId));
     }
 
     @DeleteMapping("/{id}")

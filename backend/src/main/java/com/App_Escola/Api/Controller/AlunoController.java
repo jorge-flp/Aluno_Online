@@ -2,6 +2,7 @@ package com.App_Escola.Api.Controller;
 
 import com.App_Escola.Api.Model.AlunoModel;
 import com.App_Escola.Api.Service.AlunoService;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -40,7 +41,7 @@ public class AlunoController {
 
     @PostMapping
     public ResponseEntity<AlunoModel> cadastrar(
-            @RequestBody AlunoModel aluno) {
+            @Valid @RequestBody AlunoModel aluno) {
 
         AlunoModel alunoSalvo = alunoService.salvar(aluno);
 

@@ -1,6 +1,8 @@
 package com.App_Escola.Api.Model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,9 +26,11 @@ public class AlunoResponsavelModel {
     @Column(name = "id_aluno_responsavel")
     private Integer idAlunoResponsavel;
 
-    @Column(name = "parentesco", length = 50)
+        @NotBlank(message = "O parentesco é obrigatório")
+        @Column(name = "parentesco", nullable = false, length = 50)
     private String parentesco;
 
+        @NotNull(message = "O aluno é obrigatório")
     @ManyToOne
     @JoinColumn(
             name = "aluno_matricula",
@@ -35,6 +39,7 @@ public class AlunoResponsavelModel {
     )
     private AlunoModel aluno;
 
+        @NotNull(message = "O responsável é obrigatório")
     @ManyToOne
     @JoinColumn(
             name = "responsavel_id",

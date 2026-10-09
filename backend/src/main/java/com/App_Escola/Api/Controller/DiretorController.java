@@ -2,6 +2,7 @@ package com.App_Escola.Api.Controller;
 
 import com.App_Escola.Api.Model.DiretorModel;
 import com.App_Escola.Api.Service.DiretorService;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -36,7 +37,7 @@ public class DiretorController {
 
     @PostMapping
     public ResponseEntity<DiretorModel> cadastrar(
-            @RequestBody DiretorModel diretor) {
+            @Valid @RequestBody DiretorModel diretor) {
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -46,7 +47,7 @@ public class DiretorController {
     @PutMapping("/{id}")
     public ResponseEntity<DiretorModel> atualizar(
             @PathVariable Integer id,
-            @RequestBody DiretorModel diretor) {
+            @Valid @RequestBody DiretorModel diretor) {
 
         return ResponseEntity.ok(service.atualizar(id, diretor));
     }

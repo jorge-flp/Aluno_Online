@@ -23,6 +23,13 @@ public class SupabaseStorageService {
     private String bucketName;
 
     public String uploadFile(MultipartFile arquivo) throws IOException {
+        String contentType = arquivo.getContentType() != null
+            ? arquivo.getContentType()
+            : "application/octet-stream";
+        return uploadFile(arquivo, contentType);
+        }
+
+        public String uploadFile(MultipartFile arquivo, String contentType) throws IOException {
         String originalName = arquivo.getOriginalFilename() != null ? arquivo.getOriginalFilename() : "arquivo.pdf";
         
         // Remove acentos e caracteres especiais para evitar erro de InvalidKey no Supabase
@@ -37,7 +44,7 @@ public class SupabaseStorageService {
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + supabaseKey);
-        headers.setContentType(MediaType.valueOf(arquivo.getContentType() != null ? arquivo.getContentType() : "application/pdf"));
+        headers.setContentType(MediaType.valueOf(contentType));
 
         HttpEntity<byte[]> requestEntity = new HttpEntity<>(arquivo.getBytes(), headers);
 

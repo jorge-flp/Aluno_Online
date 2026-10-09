@@ -2,6 +2,7 @@ package com.App_Escola.Api.Controller;
 
 import com.App_Escola.Api.Model.SecretarioModel;
 import com.App_Escola.Api.Service.SecretarioService;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -36,7 +37,7 @@ public class SecretarioController {
 
     @PostMapping
     public ResponseEntity<SecretarioModel> cadastrar(
-            @RequestBody SecretarioModel secretario) {
+            @Valid @RequestBody SecretarioModel secretario) {
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -46,7 +47,7 @@ public class SecretarioController {
     @PutMapping("/{id}")
     public ResponseEntity<SecretarioModel> atualizar(
             @PathVariable Integer id,
-            @RequestBody SecretarioModel secretario) {
+            @Valid @RequestBody SecretarioModel secretario) {
 
         return ResponseEntity.ok(service.atualizar(id, secretario));
     }

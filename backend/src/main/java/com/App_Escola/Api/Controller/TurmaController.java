@@ -2,6 +2,7 @@ package com.App_Escola.Api.Controller;
 
 import com.App_Escola.Api.Model.TurmaModel;
 import com.App_Escola.Api.Service.TurmaService;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -40,7 +41,7 @@ public class TurmaController {
 
     @PostMapping
     public ResponseEntity<TurmaModel> cadastrar(
-            @RequestBody TurmaModel turma) {
+            @Valid @RequestBody TurmaModel turma) {
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -50,7 +51,7 @@ public class TurmaController {
     @PutMapping("/{id}")
     public ResponseEntity<TurmaModel> atualizar(
             @PathVariable Integer id,
-            @RequestBody TurmaModel turma) {
+            @Valid @RequestBody TurmaModel turma) {
 
         return ResponseEntity.ok(
                 turmaService.atualizar(id, turma)

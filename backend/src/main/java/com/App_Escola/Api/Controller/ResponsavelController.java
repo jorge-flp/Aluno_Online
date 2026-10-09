@@ -2,6 +2,7 @@ package com.App_Escola.Api.Controller;
 
 import com.App_Escola.Api.Model.ResponsavelModel;
 import com.App_Escola.Api.Service.ResponsavelService;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -38,7 +39,7 @@ public class ResponsavelController {
 
     @PostMapping
     public ResponseEntity<ResponsavelModel> cadastrar(
-            @RequestBody ResponsavelModel responsavel) {
+            @Valid @RequestBody ResponsavelModel responsavel) {
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -48,7 +49,7 @@ public class ResponsavelController {
     @PutMapping("/{id}")
     public ResponseEntity<ResponsavelModel> atualizar(
             @PathVariable Integer id,
-            @RequestBody ResponsavelModel responsavel) {
+            @Valid @RequestBody ResponsavelModel responsavel) {
 
         return ResponseEntity.ok(
                 service.atualizar(id, responsavel)
