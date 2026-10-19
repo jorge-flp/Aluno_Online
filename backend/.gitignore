@@ -1,7 +1,18 @@
-#Ignore
+# Ignore
 backend/src/main/resources/application.properties
 
-# Maven      
+# Node / Frontend
+node_modules/
+**/node_modules/
+
+dist/
+**/dist/
+
+# Variáveis de ambiente
+.env
+*.env
+
+# Maven
 target/
 .mvn/wrapper/maven-wrapper.jar
 
@@ -16,5 +27,3 @@ target/
 # OS
 .DS_Store
 Thumbs.db
-
-.env
