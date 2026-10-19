@@ -1,0 +1,31 @@
+package com.App_Escola.Api.Model;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+@Table(name = "responsavel")
+public class ResponsavelModel {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_responsavel")
+    private Integer idResponsavel;
+
+    @Column(nullable = false, length = 100)
+    private String nome;
+
+    @Column(unique = true, length = 14)
+    private String cpf;
+
+    @Column(length = 150)
+    private String email;
+
+    @Column(length = 20)
+    private String telefone;
+}
