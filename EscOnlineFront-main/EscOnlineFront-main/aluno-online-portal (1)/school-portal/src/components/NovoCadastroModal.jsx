@@ -8,7 +8,7 @@ const PARENTESCOS = ['Mãe', 'Pai', 'Avô/Avó', 'Tio/Tia', 'Irmão/Irmã', 'Res
 const TURNOS = ['Manhã', 'Tarde', 'Noite'];
 const GRAUS_FORMACAO = ['Licenciatura', 'Bacharelado', 'Especialização', 'Mestrado', 'Doutorado'];
 const ESTADOS = ['CE', 'PE', 'PB', 'RN', 'PI', 'BA', 'MA', 'SP', 'RJ', 'MG', 'Outro'];
-const CARGOS_FUNCIONARIO = ['Secretário(a) escolar', 'Diretor(a)', 'Vice-diretor(a)', 'Coordenador(a) pedagógico', 'Coordenador(a) administrativo', 'Porteiro(a)', 'Auxiliar de limpeza', 'Merendeiro(a)', 'Outro'];
+const CARGOS_FUNCIONARIO = ['Secretário(a) escolar', 'Diretor(a)', 'Coordenador(a) pedagógico', 'Coordenador(a) administrativo'];
 
 function calcularIdade(dataNascimento) {
   if (!dataNascimento) return '';
@@ -50,7 +50,7 @@ const FUNCIONARIO_INICIAL = {
   endereco: '', numero: '', complemento: '', bairro: '', cidade: 'Pacatuba', estado: 'CE', cep: '', observacoes: '',
 };
 
-export default function NovoCadastroModal({ onClose, onSaveAluno, onSaveProfessor, onSaveResponsavel, onSaveFuncionario }) {
+export default function NovoCadastroModal({ onClose, onLoadTurmas, onSaveAluno, onSaveProfessor, onSaveResponsavel, onSaveFuncionario }) {
   const [tipo, setTipo] = useState(null);
   const [alunoForm, setAlunoForm] = useState(ALUNO_INICIAL);
   const [professorForm, setProfessorForm] = useState(PROFESSOR_INICIAL);
@@ -58,13 +58,13 @@ export default function NovoCadastroModal({ onClose, onSaveAluno, onSaveProfesso
   const [funcionarioForm, setFuncionarioForm] = useState(FUNCIONARIO_INICIAL);
   const [errors, setErrors] = useState({});
   const [saved, setSaved] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [requestError, setRequestError] = useState('');
+  const [turmas, setTurmas] = useState([]);
+  const [loadingTurmas, setLoadingTurmas] = useState(false);
 
   const idadeAluno = calcularIdade(alunoForm.dataNascimento);
   const idadeProfessor = calcularIdade(professorForm.dataNascimento);
-
-  const turmasDisponiveisAluno = TURMAS.filter(
-    (t) => (!alunoForm.ano || t.ano === alunoForm.ano) && (!alunoForm.cursoId || t.cursoId === alunoForm.cursoId)
-  );
 
   const updateAluno = (patch) => setAlunoForm((f) => ({ ...f, ...patch }));
   const updateProfessor = (patch) => setProfessorForm((f) => ({ ...f, ...patch }));
@@ -78,6 +78,21 @@ export default function NovoCadastroModal({ onClose, onSaveAluno, onSaveProfesso
         ? f.turmasIds.filter((id) => id !== turmaId)
         : [...f.turmasIds, turmaId],
     }));
+  };
+
+  const selecionarTipo = async (novoTipo) => {
+    setTipo(novoTipo);
+    setRequestError('');
+    if (novoTipo !== 'aluno') return;
+
+    setLoadingTurmas(true);
+    try {
+      setTurmas(await onLoadTurmas());
+    } catch (error) {
+      setRequestError(error.message || 'Não foi possível carregar as turmas do backend.');
+    } finally {
+      setLoadingTurmas(false);
+    }
   };
 
   const cursosDoProfessor = useMemo(() => {
@@ -95,8 +110,6 @@ export default function NovoCadastroModal({ onClose, onSaveAluno, onSaveProfesso
     if (!alunoForm.nomeCompleto.trim()) next.nomeCompleto = 'Informe o nome completo do aluno.';
     if (!alunoForm.dataNascimento) next.dataNascimento = 'Informe a data de nascimento.';
     if (!alunoForm.cpf.trim()) next.cpf = 'Informe o CPF do aluno.';
-    if (!alunoForm.ano) next.ano = 'Selecione o ano.';
-    if (!alunoForm.cursoId) next.cursoId = 'Selecione o curso.';
     if (!alunoForm.turmaId) next.turmaId = 'Selecione a turma.';
     if (!alunoForm.responsavelPrincipal.trim()) next.responsavelPrincipal = 'Informe o responsável principal.';
     setErrors(next);
@@ -127,28 +140,37 @@ export default function NovoCadastroModal({ onClose, onSaveAluno, onSaveProfesso
   const validateFuncionario = () => {
     const next = {};
     if (!funcionarioForm.nomeCompleto.trim()) next.nomeCompleto = 'Informe o nome completo.';
-    if (!funcionarioForm.cpf.trim()) next.cpf = 'Informe o CPF.';
     if (!funcionarioForm.cargo.trim()) next.cargo = 'Informe o cargo.';
+    if (funcionarioForm.cargo.startsWith('Coordenador') && !funcionarioForm.email.trim()) {
+      next.email = 'Informe o e-mail do coordenador.';
+    }
     setErrors(next);
     return Object.keys(next).length === 0;
   };
 
-  const handleSave = () => {
-    if (tipo === 'aluno') {
-      if (!validateAluno()) return;
-      onSaveAluno({ ...alunoForm });
-    } else if (tipo === 'professor') {
-      if (!validateProfessor()) return;
-      onSaveProfessor({ ...professorForm });
-    } else if (tipo === 'responsavel') {
-      if (!validateResponsavel()) return;
-      onSaveResponsavel({ ...responsavelForm });
-    } else {
-      if (!validateFuncionario()) return;
-      onSaveFuncionario({ ...funcionarioForm });
+  const handleSave = async () => {
+    if (saving) return;
+    setRequestError('');
+    let valid;
+    if (tipo === 'aluno') valid = validateAluno();
+    else if (tipo === 'professor') valid = validateProfessor();
+    else if (tipo === 'responsavel') valid = validateResponsavel();
+    else valid = validateFuncionario();
+    if (!valid) return;
+
+    setSaving(true);
+    try {
+      if (tipo === 'aluno') await onSaveAluno({ ...alunoForm });
+      else if (tipo === 'professor') await onSaveProfessor({ ...professorForm });
+      else if (tipo === 'responsavel') await onSaveResponsavel({ ...responsavelForm });
+      else await onSaveFuncionario({ ...funcionarioForm });
+      setSaved(true);
+      setTimeout(onClose, 800);
+    } catch (error) {
+      setRequestError(error.message || 'Não foi possível salvar o cadastro.');
+    } finally {
+      setSaving(false);
     }
-    setSaved(true);
-    setTimeout(onClose, 800);
   };
 
   const handleClear = () => {
@@ -170,7 +192,7 @@ export default function NovoCadastroModal({ onClose, onSaveAluno, onSaveProfesso
           <div className="flex items-center gap-2">
             {tipo && !saved && (
               <button
-                onClick={() => { setTipo(null); setErrors({}); }}
+                onClick={() => { setTipo(null); setErrors({}); setRequestError(''); }}
                 className="rounded-full p-1 text-slate-400 hover:bg-slate-100"
                 aria-label="Voltar"
               >
@@ -200,7 +222,7 @@ export default function NovoCadastroModal({ onClose, onSaveAluno, onSaveProfesso
         ) : !tipo ? (
           <div className="grid grid-cols-1 gap-3 px-6 py-8 sm:grid-cols-2">
             <button
-              onClick={() => setTipo('aluno')}
+              onClick={() => selecionarTipo('aluno')}
               className="rounded-xl border border-slate-200 p-5 text-left transition-colors hover:border-brand-action hover:bg-brand-action/5"
             >
               <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-brand-action/10 text-brand-action">
@@ -210,7 +232,7 @@ export default function NovoCadastroModal({ onClose, onSaveAluno, onSaveProfesso
               <p className="mt-1 text-xs text-slate-500">Ficha completa de matrícula, dados pessoais e responsáveis.</p>
             </button>
             <button
-              onClick={() => setTipo('professor')}
+              onClick={() => selecionarTipo('professor')}
               className="rounded-xl border border-slate-200 p-5 text-left transition-colors hover:border-brand-action hover:bg-brand-action/5"
             >
               <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-brand-action/10 text-brand-action">
@@ -220,7 +242,7 @@ export default function NovoCadastroModal({ onClose, onSaveAluno, onSaveProfesso
               <p className="mt-1 text-xs text-slate-500">Ficha completa de formação, atuação e turmas.</p>
             </button>
             <button
-              onClick={() => setTipo('responsavel')}
+              onClick={() => selecionarTipo('responsavel')}
               className="rounded-xl border border-slate-200 p-5 text-left transition-colors hover:border-brand-action hover:bg-brand-action/5"
             >
               <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-brand-action/10 text-brand-action"><Heart className="h-5 w-5" /></span>
@@ -228,7 +250,7 @@ export default function NovoCadastroModal({ onClose, onSaveAluno, onSaveProfesso
               <p className="mt-1 text-xs text-slate-500">Dados de contato e vínculo com o aluno.</p>
             </button>
             <button
-              onClick={() => setTipo('funcionario')}
+              onClick={() => selecionarTipo('funcionario')}
               className="rounded-xl border border-slate-200 p-5 text-left transition-colors hover:border-brand-action hover:bg-brand-action/5"
             >
               <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-brand-action/10 text-brand-action"><Briefcase className="h-5 w-5" /></span>
@@ -238,6 +260,9 @@ export default function NovoCadastroModal({ onClose, onSaveAluno, onSaveProfesso
           </div>
         ) : tipo === 'aluno' ? (
           <div className="flex-1 space-y-6 overflow-y-auto px-6 py-5">
+            <p className="rounded-lg bg-blue-50 px-3 py-2 text-xs text-blue-800">
+              O backend salva nome, CPF, e-mail, nascimento e turma. Os demais campos desta ficha ainda não têm campos correspondentes na API.
+            </p>
             <FormSection title="Dados pessoais">
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <Field label="Nome completo" error={errors.nomeCompleto} required span2>
@@ -300,23 +325,12 @@ export default function NovoCadastroModal({ onClose, onSaveAluno, onSaveProfesso
 
             <FormSection title="Matrícula">
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-                <Field label="Ano" error={errors.ano} required>
-                  <select value={alunoForm.ano} onChange={(e) => updateAluno({ ano: e.target.value, turmaId: '' })} className={inputCls(errors.ano)}>
-                    <option value="">Selecione</option>
-                    {ANOS.map((a) => <option key={a} value={a}>{a}</option>)}
+                <Field label="Turma" error={errors.turmaId} required span2>
+                  <select value={alunoForm.turmaId} onChange={(e) => updateAluno({ turmaId: e.target.value })} disabled={loadingTurmas || turmas.length === 0} className={inputCls(errors.turmaId)}>
+                    <option value="">{loadingTurmas ? 'Carregando turmas...' : 'Selecione uma turma cadastrada'}</option>
+                    {turmas.map((turma) => <option key={turma.idTurma} value={turma.idTurma}>{turma.nome} · {turma.anoSerie}</option>)}
                   </select>
-                </Field>
-                <Field label="Curso" error={errors.cursoId} required>
-                  <select value={alunoForm.cursoId} onChange={(e) => updateAluno({ cursoId: e.target.value, turmaId: '' })} className={inputCls(errors.cursoId)}>
-                    <option value="">Selecione</option>
-                    {CURSOS.map((c) => <option key={c.id} value={c.id}>{c.nome}</option>)}
-                  </select>
-                </Field>
-                <Field label="Turma" error={errors.turmaId} required>
-                  <select value={alunoForm.turmaId} onChange={(e) => updateAluno({ turmaId: e.target.value })} disabled={!alunoForm.ano || !alunoForm.cursoId} className={inputCls(errors.turmaId)}>
-                    <option value="">Selecione</option>
-                    {turmasDisponiveisAluno.map((t) => <option key={t.id} value={t.id}>{t.nome}</option>)}
-                  </select>
+                  {!loadingTurmas && turmas.length === 0 && <span className="mt-1 block text-xs text-slate-500">Cadastre uma turma no backend antes de cadastrar um aluno.</span>}
                 </Field>
                 <Field label="Data de matrícula"><input type="date" value={alunoForm.dataMatricula} onChange={(e) => updateAluno({ dataMatricula: e.target.value })} className="input" /></Field>
                 <Field label="Turno">
@@ -332,6 +346,9 @@ export default function NovoCadastroModal({ onClose, onSaveAluno, onSaveProfesso
           </div>
         ) : tipo === 'professor' ? (
           <div className="flex-1 space-y-6 overflow-y-auto px-6 py-5">
+            <p className="rounded-lg bg-blue-50 px-3 py-2 text-xs text-blue-800">
+              O backend salva nome, CPF, e-mail e telefone. Formação, área, disciplinas e turmas ainda não são persistidas pela API.
+            </p>
             <FormSection title="Dados pessoais">
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <Field label="Nome completo" error={errors.nomeCompleto} required span2>
@@ -428,6 +445,9 @@ export default function NovoCadastroModal({ onClose, onSaveAluno, onSaveProfesso
           </div>
         ) : tipo === 'responsavel' ? (
           <div className="flex-1 space-y-6 overflow-y-auto px-6 py-5">
+            <p className="rounded-lg bg-blue-50 px-3 py-2 text-xs text-blue-800">
+              O backend salva nome, CPF, e-mail e telefone. O vínculo informado abaixo ainda não é enviado à API.
+            </p>
             <FormSection title="Dados do responsável">
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <Field label="Nome completo" error={errors.nomeCompleto} required span2>
@@ -457,14 +477,16 @@ export default function NovoCadastroModal({ onClose, onSaveAluno, onSaveProfesso
           </div>
         ) : (
           <div className="flex-1 space-y-6 overflow-y-auto px-6 py-5">
+            <p className="rounded-lg bg-blue-50 px-3 py-2 text-xs text-blue-800">
+              O backend salva apenas nome, e-mail e telefone para esses cargos. CPF, datas e endereço não são persistidos.
+            </p>
             <FormSection title="Dados do funcionário">
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <Field label="Nome completo" error={errors.nomeCompleto} required span2>
                   <input type="text" value={funcionarioForm.nomeCompleto} onChange={(e) => updateFuncionario({ nomeCompleto: e.target.value })} className={inputCls(errors.nomeCompleto)} autoFocus />
                 </Field>
-                <Field label="CPF" error={errors.cpf} required><input type="text" value={funcionarioForm.cpf} onChange={(e) => updateFuncionario({ cpf: e.target.value })} className={inputCls(errors.cpf)} /></Field>
                 <Field label="Telefone"><input type="text" value={funcionarioForm.telefone} onChange={(e) => updateFuncionario({ telefone: e.target.value })} className="input" /></Field>
-                <Field label="E-mail"><input type="email" value={funcionarioForm.email} onChange={(e) => updateFuncionario({ email: e.target.value })} className="input" /></Field>
+                <Field label="E-mail" error={errors.email} required={funcionarioForm.cargo.startsWith('Coordenador')}><input type="email" value={funcionarioForm.email} onChange={(e) => updateFuncionario({ email: e.target.value })} className={inputCls(errors.email)} /></Field>
                 <Field label="Cargo" error={errors.cargo} required><select value={funcionarioForm.cargo} onChange={(e) => updateFuncionario({ cargo: e.target.value })} className={inputCls(errors.cargo)}><option value="">Selecione</option>{CARGOS_FUNCIONARIO.map((cargo) => <option key={cargo} value={cargo}>{cargo}</option>)}</select></Field>
                 <Field label="Data de contratação"><input type="date" value={funcionarioForm.dataContratacao} onChange={(e) => updateFuncionario({ dataContratacao: e.target.value })} className="input" /></Field>
               </div>
@@ -483,15 +505,18 @@ export default function NovoCadastroModal({ onClose, onSaveAluno, onSaveProfesso
 
         {tipo && !saved && (
           <div className="flex items-center justify-between border-t border-slate-100 px-6 py-4">
-            <button onClick={handleClear} className="text-sm font-semibold text-slate-400 hover:text-slate-600">
+            <div>
+              {requestError && <p role="alert" className="mb-2 text-sm font-medium text-rose-600">{requestError}</p>}
+              <button onClick={handleClear} disabled={saving} className="text-sm font-semibold text-slate-400 hover:text-slate-600 disabled:opacity-50">
               Limpar dados
-            </button>
+              </button>
+            </div>
             <div className="flex gap-2">
-              <button onClick={onClose} className="rounded-lg border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-600 hover:bg-surface-muted">
+              <button onClick={onClose} disabled={saving} className="rounded-lg border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-600 hover:bg-surface-muted disabled:opacity-50">
                 Cancelar
               </button>
-              <button onClick={handleSave} className="rounded-lg bg-brand-action px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-600">
-                Salvar cadastro
+              <button onClick={handleSave} disabled={saving || (tipo === 'aluno' && (loadingTurmas || turmas.length === 0))} className="rounded-lg bg-brand-action px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-600 disabled:opacity-50">
+                {saving ? 'Salvando...' : 'Salvar cadastro'}
               </button>
             </div>
           </div>

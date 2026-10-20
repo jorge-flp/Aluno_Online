@@ -1,5 +1,6 @@
 import React, { createContext, useCallback, useContext, useMemo, useState } from 'react';
 import { ALUNOS, getTurma, getCurso } from '../data/SchoolData';
+import { criarAluno, criarFuncionario, criarProfessor, criarResponsavel, listarCadastros } from '../services/cadastros';
 
 const CadastrosContext = createContext(null);
 
@@ -56,48 +57,47 @@ const FUNCIONARIOS_INICIAIS = [
   { id: 'MC3', matricula: 'FUNC-2019-02', nomeCompleto: 'Marina Costa', cargo: 'Diretora', cpf: '', telefone: '', email: '', dataContratacao: '', endereco: '', numero: '', complemento: '', bairro: '', cidade: '', estado: '', cep: '', observacoes: '', status: 'Ativo' },
 ];
 
-let nextAlunoId = 1000;
-let nextProfessorId = 1000;
-let nextResponsavelId = 1000;
-let nextFuncionarioId = 1000;
-
 export function CadastrosProvider({ children }) {
   const [alunos, setAlunos] = useState(ALUNOS_INICIAIS);
   const [professores, setProfessores] = useState(PROFESSORES_INICIAIS);
   const [responsaveis, setResponsaveis] = useState(RESPONSAVEIS_INICIAIS);
   const [funcionarios, setFuncionarios] = useState(FUNCIONARIOS_INICIAIS);
 
-  const addAluno = useCallback((dados) => {
-    const idNum = nextAlunoId++;
-    const novo = { id: `NA${idNum}`, matricula: `MAT-${idNum}`, status: 'Ativo', ...dados };
+  const carregarCadastros = useCallback(async () => {
+    const cadastros = await listarCadastros();
+    setAlunos(cadastros.alunos);
+    setProfessores(cadastros.professores);
+    setResponsaveis(cadastros.responsaveis);
+    setFuncionarios(cadastros.funcionarios);
+  }, []);
+
+  const addAluno = useCallback(async (dados) => {
+    const novo = await criarAluno(dados);
     setAlunos((prev) => [novo, ...prev]);
     return novo;
   }, []);
 
-  const addProfessor = useCallback((dados) => {
-    const idNum = nextProfessorId++;
-    const novo = { id: `NP${idNum}`, matricula: `PROF-2026-${idNum}`, status: 'Ativo', ...dados };
+  const addProfessor = useCallback(async (dados) => {
+    const novo = await criarProfessor(dados);
     setProfessores((prev) => [novo, ...prev]);
     return novo;
   }, []);
 
-  const addResponsavel = useCallback((dados) => {
-    const idNum = nextResponsavelId++;
-    const novo = { id: `NR${idNum}`, matricula: `RESP-${idNum}`, status: 'Ativo', ...dados };
+  const addResponsavel = useCallback(async (dados) => {
+    const novo = await criarResponsavel(dados);
     setResponsaveis((prev) => [novo, ...prev]);
     return novo;
   }, []);
 
-  const addFuncionario = useCallback((dados) => {
-    const idNum = nextFuncionarioId++;
-    const novo = { id: `NF${idNum}`, matricula: `FUNC-2026-${idNum}`, status: 'Ativo', ...dados };
+  const addFuncionario = useCallback(async (dados) => {
+    const novo = await criarFuncionario(dados);
     setFuncionarios((prev) => [novo, ...prev]);
     return novo;
   }, []);
 
   const value = useMemo(
-    () => ({ alunos, professores, responsaveis, funcionarios, addAluno, addProfessor, addResponsavel, addFuncionario }),
-    [alunos, professores, responsaveis, funcionarios, addAluno, addProfessor, addResponsavel, addFuncionario]
+    () => ({ alunos, professores, responsaveis, funcionarios, carregarCadastros, addAluno, addProfessor, addResponsavel, addFuncionario }),
+    [alunos, professores, responsaveis, funcionarios, carregarCadastros, addAluno, addProfessor, addResponsavel, addFuncionario]
   );
 
   return <CadastrosContext.Provider value={value}>{children}</CadastrosContext.Provider>;
@@ -116,8 +116,8 @@ export function resumoAluno(a) {
     id: (a.nomeCompleto || '??').split(' ').map((p) => p[0]).slice(0, 2).join('').toUpperCase(),
     name: a.nomeCompleto,
     code: a.matricula,
-    etapa: curso?.nome ?? '—',
-    turma: turma?.nome ?? '—',
+    etapa: curso?.nome ?? a.turma?.anoSerie ?? '—',
+    turma: a.turma?.nome ?? turma?.nome ?? '—',
     status: a.status,
   };
 }

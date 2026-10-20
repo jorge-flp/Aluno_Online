@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Plus, Search, GraduationCap, User, Heart, Briefcase, ArrowUpRight } from 'lucide-react';
 import PageHeader from '../../components/PageHeader';
 import StatusBadge from '../../components/StatusBadge';
@@ -7,6 +7,7 @@ import NovoCadastroModal from '../../components/NovoCadastroModal';
 import ViewFichaModal from '../../components/ViewFichaModal';
 import { useCadastros, resumoAluno, resumoProfessor, resumoResponsavel, resumoFuncionario } from '../../context/CadastrosContext';
 import { CADASTROS_FOOTER_STATS } from '../../data/mockData';
+import { listarTurmas } from '../../services/cadastros';
 
 const TABS = [
   { key: 'alunos', label: 'Alunos', icon: GraduationCap },
@@ -16,11 +17,25 @@ const TABS = [
 ];
 
 export default function Cadastros() {
-  const { alunos, professores, responsaveis, funcionarios, addAluno, addProfessor, addResponsavel, addFuncionario } = useCadastros();
+  const { alunos, professores, responsaveis, funcionarios, carregarCadastros, addAluno, addProfessor, addResponsavel, addFuncionario } = useCadastros();
   const [tab, setTab] = useState('alunos');
   const [query, setQuery] = useState('');
   const [novoCadastroAberto, setNovoCadastroAberto] = useState(false);
   const [fichaAberta, setFichaAberta] = useState(null);
+  const [carregando, setCarregando] = useState(true);
+  const [erroCarregamento, setErroCarregamento] = useState('');
+
+  useEffect(() => {
+    let ativo = true;
+    carregarCadastros()
+      .catch((error) => {
+        if (ativo) setErroCarregamento(error.message || 'Não foi possível carregar os cadastros do backend.');
+      })
+      .finally(() => {
+        if (ativo) setCarregando(false);
+      });
+    return () => { ativo = false; };
+  }, [carregarCadastros]);
 
   const dadosPorAba = {
     alunos: { lista: alunos, resumo: resumoAluno },
@@ -54,6 +69,9 @@ export default function Cadastros() {
         actionIcon={Plus}
         onAction={() => setNovoCadastroAberto(true)}
       />
+
+      {carregando && <p role="status" className="mb-4 text-sm text-slate-500">Carregando cadastros do backend...</p>}
+      {erroCarregamento && <p role="alert" className="mb-4 rounded-lg bg-rose-50 px-4 py-3 text-sm text-rose-700">Não foi possível carregar a lista da API. Os dados demonstrativos continuam visíveis. {erroCarregamento}</p>}
 
       <section className="rounded-2xl border border-slate-200 bg-surface-card p-5 shadow-card sm:p-6">
         <div className="mb-5 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
@@ -173,10 +191,11 @@ export default function Cadastros() {
       {novoCadastroAberto && (
         <NovoCadastroModal
           onClose={() => setNovoCadastroAberto(false)}
-          onSaveAluno={(dados) => { addAluno(dados); setTab('alunos'); }}
-          onSaveProfessor={(dados) => { addProfessor(dados); setTab('professores'); }}
-          onSaveResponsavel={(dados) => { addResponsavel(dados); setTab('responsaveis'); }}
-          onSaveFuncionario={(dados) => { addFuncionario(dados); setTab('funcionarios'); }}
+          onLoadTurmas={listarTurmas}
+          onSaveAluno={async (dados) => { await addAluno(dados); setTab('alunos'); }}
+          onSaveProfessor={async (dados) => { await addProfessor(dados); setTab('professores'); }}
+          onSaveResponsavel={async (dados) => { await addResponsavel(dados); setTab('responsaveis'); }}
+          onSaveFuncionario={async (dados) => { await addFuncionario(dados); setTab('funcionarios'); }}
         />
       )}
 

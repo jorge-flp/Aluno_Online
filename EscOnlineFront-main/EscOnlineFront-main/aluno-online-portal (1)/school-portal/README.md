@@ -1,7 +1,13 @@
-# Aluno Online — Portal (Mock Frontend)
+# Aluno Online — Portal
 
 Recriação em React + Vite + Tailwind CSS do layout enviado, com dados fictícios
 no lugar de qualquer informação pessoal real presente nos prints originais.
+
+Os cadastros de alunos, professores, responsáveis e funcionários suportados
+usam a API Spring Boot. Configure `VITE_API_URL` com a URL base do backend
+(sem acrescentar `/api`) no ambiente de execução e de build do Vite. Em
+produção, defina essa variável na configuração do deploy; ela não tem fallback
+para uma URL local.
 
 ## Como rodar
 
@@ -11,6 +17,19 @@ npm run dev
 ```
 
 Abra http://localhost:5173
+
+Para testar os cadastros, defina `VITE_API_URL` antes de iniciar o Vite. A API
+usa as rotas `/alunos`, `/professores`, `/responsaveis`, `/turmas`,
+`/secretarios`, `/diretores` e `/coordenadores`. O formulário de aluno requer
+uma turma já cadastrada no backend. Cargos sem rota correspondente não são
+oferecidos para cadastro.
+
+No PowerShell, para backend local na porta padrão do projeto:
+
+```powershell
+$env:VITE_API_URL = "http://localhost:8081"
+npm run dev
+```
 
 ## Build de produção
 
