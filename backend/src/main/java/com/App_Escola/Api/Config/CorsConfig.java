@@ -7,23 +7,32 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
 public class CorsConfig {
 
-    @Value("${app.frontend.url:https://esconlinefront-school-portal.vercel.app}")
+    @Value("${app.frontend.url:https://alunoonline-production.up.railway.app}")
     private String frontendUrl;
 
-    @Value("${app.frontend.preview-origin-pattern:https://esconlinefront-school-portal-*.vercel.app}")
+    @Value("${app.frontend.preview-origin-pattern:}")
     private String frontendPreviewOriginPattern;
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOriginPatterns(
-            List.of(frontendUrl, frontendPreviewOriginPattern, "http://localhost:5173")
-        );
+        List<String> allowedOrigins = new ArrayList<>();
+        allowedOrigins.add("http://localhost:5173");
+
+        if (frontendUrl != null && !frontendUrl.isBlank()) {
+            allowedOrigins.add(frontendUrl.trim());
+        }
+        if (frontendPreviewOriginPattern != null && !frontendPreviewOriginPattern.isBlank()) {
+            allowedOrigins.add(frontendPreviewOriginPattern.trim());
+        }
+
+        configuration.setAllowedOriginPatterns(allowedOrigins);
         configuration.setAllowedMethods(
                 List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
         );

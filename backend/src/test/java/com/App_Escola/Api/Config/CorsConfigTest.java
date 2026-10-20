@@ -36,4 +36,23 @@ class CorsConfigTest {
         );
         assertNull(configuration.checkOrigin("https://unrelated-project.vercel.app"));
     }
+
+    @Test
+    void allowsRailwayFrontendOrigin() {
+        CorsConfig corsConfig = new CorsConfig();
+        ReflectionTestUtils.setField(corsConfig, "frontendUrl", "https://alunoonline-production.up.railway.app");
+        ReflectionTestUtils.setField(corsConfig, "frontendPreviewOriginPattern", "");
+
+        CorsConfiguration configuration = corsConfig
+                .corsConfigurationSource()
+                .getCorsConfiguration(new MockHttpServletRequest("OPTIONS", "/turmas"));
+
+        assertNotNull(configuration);
+        assertEquals(
+                "https://alunoonline-production.up.railway.app",
+                configuration.checkOrigin("https://alunoonline-production.up.railway.app")
+        );
+        assertEquals("http://localhost:5173", configuration.checkOrigin("http://localhost:5173"));
+        assertNull(configuration.checkOrigin("https://esconlinefront-school-portal.vercel.app"));
+    }
 }
