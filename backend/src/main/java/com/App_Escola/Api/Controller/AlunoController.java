@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/alunos")
-@CrossOrigin(origins = "*")
 public class AlunoController {
 
     private final AlunoService alunoService;
