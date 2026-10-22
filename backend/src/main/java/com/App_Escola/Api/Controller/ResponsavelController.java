@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/responsaveis")
+@RequestMapping("/api/responsaveis")
 @CrossOrigin(origins = "*")
 public class ResponsavelController {
 

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/NotasEscritas")
+@RequestMapping("/api/NotasEscritas")
 public class NotaEscritaController {
 
     @Autowired

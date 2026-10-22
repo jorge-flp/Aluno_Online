@@ -13,7 +13,7 @@ import java.util.Locale;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/Atestados")
+@RequestMapping("/api/Atestados")
 public class AtestadoController {
 
     private static final Map<String, String> MIME_TYPES = Map.of(

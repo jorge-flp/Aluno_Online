@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/boletins")
+@RequestMapping("/api/boletins")
 @CrossOrigin(origins = "*")
 public class BoletimController {
 

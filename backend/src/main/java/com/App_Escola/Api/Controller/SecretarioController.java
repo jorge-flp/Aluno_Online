@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/secretarios")
+@RequestMapping("/api/secretarios")
 @CrossOrigin(origins = "*")
 public class SecretarioController {
 
