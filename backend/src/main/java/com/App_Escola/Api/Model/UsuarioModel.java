@@ -1,8 +1,18 @@
 package com.App_Escola.Api.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDateTime;
 
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "usuarios")
 public class UsuarioModel {
@@ -11,9 +21,10 @@ public class UsuarioModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, length = 255)
     private String email;
 
+    @JsonIgnore
     @Column(nullable = false)
     private String senha;
 
@@ -21,10 +32,15 @@ public class UsuarioModel {
     private String nome;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false, length = 30)
     private PerfilUsuario perfil;
 
-    private LocalDateTime criadoEm = LocalDateTime.now();
+    @Column(name = "perfil_id")
+    private Long perfilId;
+
+    @Column(name = "criado_em", nullable = false,
+            updatable = false)
+    private LocalDateTime criadoEm;
 
     public enum PerfilUsuario {
         ADMIN,
@@ -36,43 +52,10 @@ public class UsuarioModel {
         COORDENADOR
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getSenha() {
-        return senha;
-    }
-
-    public void setSenha(String senha) {
-        this.senha = senha;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public PerfilUsuario getPerfil() {
-        return perfil;
-    }
-
-    public void setPerfil(PerfilUsuario perfil) {
-        this.perfil = perfil;
-    }
-
-    public LocalDateTime getCriadoEm() {
-        return criadoEm;
+    @PrePersist
+    public void prePersist() {
+        if (criadoEm == null) {
+            criadoEm = LocalDateTime.now();
+        }
     }
 }
