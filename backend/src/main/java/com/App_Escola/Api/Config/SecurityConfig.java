@@ -14,7 +14,6 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 
@@ -28,8 +27,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -39,13 +36,11 @@ import java.util.List;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    // Criptografia de senhas com BCrypt
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    // Filtro responsável pela autenticação JWT
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter(
             JwtService jwtService,
@@ -57,7 +52,6 @@ public class SecurityConfig {
         );
     }
 
-    // Configuração principal do Spring Security
     @Bean
     public SecurityFilterChain securityFilterChain(
             HttpSecurity http,
@@ -76,36 +70,180 @@ public class SecurityConfig {
             )
 
             .httpBasic(basic -> basic.disable())
-
             .formLogin(form -> form.disable())
-
             .logout(logout -> logout.disable())
 
             .authorizeHttpRequests(auth -> auth
 
-                // Requisições CORS
+                // CORS
                 .requestMatchers(
-                    HttpMethod.OPTIONS,
-                    "/**"
+                    HttpMethod.OPTIONS, "/**"
                 ).permitAll()
 
-                // Login público
+                // AUTENTICAÇÃO
                 .requestMatchers(
-                    HttpMethod.POST,
-                    "/auth/login"
+                    HttpMethod.POST, "/auth/login"
                 ).permitAll()
 
-                // Cadastro permitido somente para ADMIN
+                .requestMatchers("/auth/usuarios/**")
+                    .hasRole("ADMIN")
+
+                // ALUNOS
                 .requestMatchers(
-                    HttpMethod.POST,
-                    "/auth/usuarios"
+                    HttpMethod.GET, "/alunos/**"
+                ).hasAnyRole(
+                    "ADMIN", "DIRETOR", "SECRETARIO"
+                )
+
+                .requestMatchers(
+                    HttpMethod.POST, "/alunos/**"
+                ).hasAnyRole(
+                    "ADMIN", "DIRETOR", "SECRETARIO"
+                )
+
+                .requestMatchers(
+                    HttpMethod.PUT, "/alunos/**"
+                ).hasAnyRole(
+                    "ADMIN", "DIRETOR", "SECRETARIO"
+                )
+
+                .requestMatchers(
+                    HttpMethod.DELETE, "/alunos/**"
+                ).hasAnyRole(
+                    "ADMIN", "DIRETOR", "SECRETARIO"
+                )
+
+                // RESPONSÁVEIS
+                .requestMatchers(
+                    HttpMethod.GET, "/responsaveis/**"
+                ).hasAnyRole(
+                    "ADMIN", "DIRETOR", "SECRETARIO"
+                )
+
+                .requestMatchers(
+                    HttpMethod.POST, "/responsaveis/**"
+                ).hasAnyRole(
+                    "ADMIN", "DIRETOR", "SECRETARIO"
+                )
+
+                .requestMatchers(
+                    HttpMethod.PUT, "/responsaveis/**"
+                ).hasAnyRole(
+                    "ADMIN", "DIRETOR", "SECRETARIO"
+                )
+
+                .requestMatchers(
+                    HttpMethod.DELETE, "/responsaveis/**"
+                ).hasAnyRole(
+                    "ADMIN", "DIRETOR", "SECRETARIO"
+                )
+
+                // RELACIONAMENTO ALUNO-RESPONSÁVEL
+                .requestMatchers(
+                    "/alunos-responsaveis/**"
+                ).hasAnyRole(
+                    "ADMIN", "DIRETOR", "SECRETARIO"
+                )
+
+                // PROFESSORES
+                .requestMatchers(
+                    HttpMethod.GET, "/professores/**"
+                ).hasAnyRole(
+                    "ADMIN", "DIRETOR", "COORDENADOR", "SECRETARIO"
+                )
+
+                .requestMatchers(
+                    "/professores/**"
+                ).hasAnyRole(
+                    "ADMIN", "DIRETOR", "SECRETARIO"
+                )
+
+                // DIRETORES, SECRETÁRIOS E COORDENADORES
+                .requestMatchers(
+                    "/diretores/**",
+                    "/secretarios/**",
+                    "/coordenadores/**"
                 ).hasRole("ADMIN")
 
-                // Endpoint de erro
+                // TURMAS
+                .requestMatchers(
+                    HttpMethod.GET, "/turmas/**"
+                ).hasAnyRole(
+                    "ADMIN", "DIRETOR", "COORDENADOR", "SECRETARIO"
+                )
+
+                .requestMatchers(
+                    "/turmas/**"
+                ).hasAnyRole(
+                    "ADMIN", "DIRETOR", "COORDENADOR", "SECRETARIO"
+                )
+
+                // DISCIPLINAS
+                .requestMatchers(
+                    HttpMethod.GET, "/disciplinas/**"
+                ).hasAnyRole(
+                    "ADMIN", "DIRETOR", "COORDENADOR",
+                    "SECRETARIO", "PROFESSOR"
+                )
+
+                .requestMatchers(
+                    "/disciplinas/**"
+                ).hasAnyRole(
+                    "ADMIN", "DIRETOR", "COORDENADOR"
+                )
+
+                // PROFESSOR, TURMA E DISCIPLINA
+                .requestMatchers(
+                    "/professores-turmas-disciplinas/**"
+                ).hasAnyRole(
+                    "ADMIN", "DIRETOR", "COORDENADOR"
+                )
+
+                // NOTAS
+                .requestMatchers(
+                    "/notas/**"
+                ).hasAnyRole(
+                    "ADMIN", "DIRETOR", "COORDENADOR"
+                )
+
+                // NOTAS ESCRITAS
+                .requestMatchers(
+                    "/NotasEscritas/**"
+                ).hasAnyRole(
+                    "ADMIN", "DIRETOR", "COORDENADOR"
+                )
+
+                // BOLETINS
+                .requestMatchers(
+                    HttpMethod.GET, "/boletins/**"
+                ).hasAnyRole(
+                    "ADMIN", "DIRETOR", "COORDENADOR", "SECRETARIO"
+                )
+
+                .requestMatchers(
+                    HttpMethod.POST, "/boletins/**"
+                ).hasAnyRole(
+                    "ADMIN", "DIRETOR", "COORDENADOR"
+                )
+
+                .requestMatchers(
+                    HttpMethod.DELETE, "/boletins/**"
+                ).hasAnyRole(
+                    "ADMIN", "DIRETOR"
+                )
+
+                // ATESTADOS
+                .requestMatchers(
+                    "/Atestados/**"
+                ).hasAnyRole(
+                    "ADMIN", "DIRETOR", "SECRETARIO"
+                )
+
+                // ERROS
                 .requestMatchers("/error").permitAll()
 
-                // Demais rotas exigem autenticação
-                .anyRequest().authenticated()
+                // QUALQUER OUTRA ROTA: SOMENTE ADMIN
+                .anyRequest().hasRole("ADMIN")
             )
 
             .exceptionHandling(exception -> exception
@@ -122,12 +260,11 @@ public class SecurityConfig {
                     (request, response, ex) ->
                         response.sendError(
                             HttpServletResponse.SC_FORBIDDEN,
-                            "Você não possui permissão para acessar este recurso."
+                            "Você não possui permissão."
                         )
                 )
             )
 
-            // Adiciona o filtro JWT antes do filtro padrão
             .addFilterBefore(
                 jwtFilter,
                 UsernamePasswordAuthenticationFilter.class
@@ -136,7 +273,7 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // Filtro de autenticação JWT
+    // FILTRO JWT
     public static class JwtAuthenticationFilter
             extends OncePerRequestFilter {
 
@@ -155,7 +292,6 @@ public class SecurityConfig {
         protected boolean shouldNotFilter(
                 HttpServletRequest request
         ) {
-
             return request.getMethod().equalsIgnoreCase("OPTIONS")
                     || (
                         request.getMethod().equalsIgnoreCase("POST")
@@ -174,7 +310,6 @@ public class SecurityConfig {
                     HttpHeaders.AUTHORIZATION
             );
 
-            // Sem token: deixa o Spring Security decidir o acesso
             if (authorization == null ||
                     !authorization.startsWith("Bearer ")) {
 
@@ -186,9 +321,7 @@ public class SecurityConfig {
 
             final String email;
 
-            // 1. Valida exclusivamente o token JWT
             try {
-
                 email = jwtService.validarToken(token);
 
             } catch (JwtException | IllegalArgumentException ex) {
@@ -203,8 +336,6 @@ public class SecurityConfig {
                 return;
             }
 
-            // 2. Busca o usuário no banco
-            // Erros de conexão ou consulta não serão tratados como JWT inválido.
             var usuarioOptional = usuarioRepository
                     .findByEmailIgnoreCase(email);
 
@@ -222,9 +353,8 @@ public class SecurityConfig {
 
             UsuarioModel usuario = usuarioOptional.get();
 
-            // 3. Define o perfil como autoridade do Spring Security
-            String autoridade = "ROLE_" +
-                    usuario.getPerfil().name();
+            String autoridade =
+                    "ROLE_" + usuario.getPerfil().name();
 
             var authentication =
                     new UsernamePasswordAuthenticationToken(
@@ -235,15 +365,10 @@ public class SecurityConfig {
                             )
                     );
 
-            authentication.setDetails(
-                    new WebAuthenticationDetailsSource()
-                            .buildDetails(request)
-            );
-
             SecurityContextHolder.getContext()
                     .setAuthentication(authentication);
 
-            // 4. Continua a execução fora do try/catch do JWT
+            // Continua fora do try/catch de validação JWT.
             chain.doFilter(request, response);
         }
     }
